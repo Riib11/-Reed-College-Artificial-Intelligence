@@ -409,7 +409,7 @@ def cornersHeuristic(state, problem):
     possiblePaths = [path for path in it.permutations(state.cornersLeft)]
     possiblePathsLengths = [pathLength(path) for path in possiblePaths]
 
-    # print min(possiblePathsLengths) #$LOGGER
+    # print min(possiblePathsLengths) # $LOGGER
 
     return min(possiblePathsLengths)
 
