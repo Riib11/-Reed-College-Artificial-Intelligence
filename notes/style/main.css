@@ -1,0 +1,132 @@
+@font-face {
+    font-family: themify;
+    src: url(../font/themify.woff);
+}
+
+html {
+    background-color: white;
+    color: black;
+
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+
+    background-color: #6A6262;
+    font-size: 12pt;
+}
+
+#container {
+    width: 700px;
+    min-height: 100vh;
+    margin: auto;
+    box-shadow: 0px 0px 10px 1px black;
+    /*padding: 40px;*/
+    padding-bottom: 60px;
+    margin-top: -30px;
+    /*padding-top: 0px;*/
+
+    background-color: white;
+}
+
+.paragraph {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.image {
+    max-width: 800px;
+    margin: auto;
+}
+
+.codeinline {
+    display: inline-block;
+    background-color: white;
+    color: black;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.mathmultiline {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.codemultiline {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    box-shadow:
+        0px -5px 5px 0px #E3D3C8,
+        0px 5px 5px 0px #E3D3C8;
+
+    background-color: #E3D3C8;
+    color: black;
+}
+
+.link {
+    color: blue;
+}
+
+.italic { font-style: italic; }
+.bold { font-weight: bold; }
+
+.unorderedlistitem {
+    padding-left: 50px;
+    padding-right: 40px;
+}
+
+.quote{
+   padding-left: 20px;
+   background-color: rgb(230,230,230);
+   border-left-style: inset;
+   border-left-width: 5px;
+   padding-top: 2px;
+   padding-bottom: 2px;
+}
+
+.h1 {
+    text-align: center;
+    background-color: #A0B9C3;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    /*margin-left: -40px;*/
+    /*margin-right: -40px;*/
+
+    font-family: themify;
+}
+
+.h2 {
+    box-shadow: 0px -1px 0px 0px black;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.h3 {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.h4 {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.align-right {
+    text-align: right;
+    position: relative;
+    top: -20px;
+    margin-left: 40px;
+    margin-right: 40px;
+}

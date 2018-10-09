@@ -1,0 +1,101 @@
+*7.12*
+
+Goal: prove (~A or ~B) from
+
+- A <=> (B or E)
+- E => D
+- (C and F) => ~B
+- E => B
+- B => F
+- B => C
+
+Proof:
+
+- (A <=> (B or E))
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+
+(rewrite iff) |-
+
+(A => (B or E))
+and ((B or E) => A)
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+
+(for sake of contradiction,
+ suppose that) ~(~A or ~B) |-
+
+(A => (B or E))
+and ((B or E) => A)
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+- and ~(~A or ~B)
+
+(demorgan's law) |-
+
+- (A => (B or E))
+- and ((B or E) => A)
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+- and (B => F)
+- and (B => C)
+- and (A)
+- and (B)
+
+(modus ponens) |-
+
+(A => (B or E))
+and ((B or E) => A)
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+and (B or E)
+and (A)
+and (B)
+and (F)
+and (C)
+
+(modus ponens) |-
+
+(A => (B or E))
+and ((B or E) => A)
+and (E => D)
+- and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+and (B or E)
+and (A)
+and (B)
+- and (C and F) // just combined them
+
+(modus ponens) |-
+
+(A => (B or E))
+and ((B or E) => A)
+and (E => D)
+and (C and F) => ~B
+and (E => B)
+and (B => F)
+and (B => C)
+and (B or E)
+and (A)
+- and (B)
+and (C and F)
+- and (~B)
+
+(contradiction) |-
+
+(~A or ~B)

@@ -1,0 +1,66 @@
+# FOL to Propositional Logic
+
+::style style/main.css
+
+How to translate from FOL to Propositional Logic.
+
+*Example*.
+
+$$
+\forall x (\forall y (Animal(y) \implies Loves(x,y)) \implies \exists y (Logives(y,x)))
+$$
+
+*1*. Rewrite implication.
+
+$$
+\forall x (\lnot \forall y (Animal(y)) \lor Loves(x,y))
+\lor \exists y (Loves(y,x))
+$$
+
+*2*. Rewrite negative quantifiers.
+
+$$
+\forall x (\exists y (Animal(y) \land \lnot Loves(x,y))
+\lor \exists y (Loves(y,x)))
+$$
+
+*3*. Disambiguiate variables
+
+$$
+\forall x (\exists y (Animal(y) \land \lnot Loves(x,y))
+\lor \exists z (Loves(z,x)))
+$$
+
+*4*. Rewrite existence quantifiers as functions
+
+$$
+\forall x (Animal(F(x)) \lor \lnot Loves(x,F(x)))
+\lor Loves(G(x),x)
+$$
+
+*5*. Push all quantifiers to the left (already done in this example)
+
+$$
+\forall x (Animal(F(x)) \lor \lnot Loves(x,F(x)))
+\lor Loves(G(x),x)
+$$
+
+*6*. Eliminate forall quantifiers by replacing with conjunctions of combinations. Say we have $Alice$ and $Bob$.
+
+$$
+(Animal(F(Alice)) \lor Loves(G(Alice),Alice)) \\
+\lor (\lnot Loves(Alice),F(Alice) \lor Loves(G(Alice),Alice)) \\
+    \lor \\
+(Animal(F(Bob)) \lor Loves(G(Bob),Bob)) \\
+\lor (\lnot Loves(Bob),F(Bob) \lor Loves(G(Bob),Bob))
+$$
+
+*7*. Replace function invocations with names
+
+$$
+(\text{Animal-F-Alice} \lor \text{Loves-G-Alice-Alice}) \\
+\lor (\lnot \text{Loves-Alice-F-Alice} \lor \text{Loves-G-Alice-Alice}) \\
+    \lor \\
+(\text{Animal-F-Bob} \lor \text{Loves-G-Bob-Bob}) \\
+\lor (\lnot \text{Loves-Bob-F-Bob} \lor \text{Loves-G-Bob-Bob})
+$$

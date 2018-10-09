@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Logical Clauses</span></h1><p class="paragraph"><span class="span"><span class="bold">Literals</span> are <span class="mathinline">\(\{ \sigma \mid \sigma \in \Sigma \} \cup \{ \lnot \sigma \mid \sigma \in \Sigma \}\)</span>. And, <span class="mathinline">\(\bar{l} := \lnot \sigma \text{ if } l = \sigma \text{ else } \sigma \text{ if } l = \lnot \sigma\)</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">Clauses</span> are <span class="mathinline">\(\{ l_1 \lor \cdots \lor l_k \mid k \geq 1, l_i \in \text{Literals}(\Sigma) \}\)</span>.</span></p><p class="paragraph"><span class="span">Remember that <span class="mathinline">\(a \vDash b \iff I(a \land \lnot b) = \varnothing\)</span>.</span></p><p class="paragraph"><span class="span">A way to show that a phrase <span class="mathinline">\(a\)</span> is unsatisfiable is to show that <span class="mathinline">\(a \vDash b\)</span> for some unsatisfiable <span class="mathinline">\(b\)</span>. This is because <span class="mathinline">\((a \vDash b) \implies (I(a) \subseteq I(b)) \implies (I(a) \subseteq \varnothing) \implies (I(a) = \varnothing)\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Notation</span>:</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(a \vdash b\)</span> means that <span class="mathinline">\(b\)</span> is derivable from <span class="mathinline">\(a\)</span> via one logical step.</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(a \vDash b\)</span> means that <span class="mathinline">\(b\)</span> is derivable from <span class="mathinline">\(a\)</span> via some number of logical steps. In other words, <span class="mathinline">\(a\)</span> entails <span class="mathinline">\(b\)</span>.</span></li><p class="paragraph"><span class="span">Example proof of unsatisfiability:</span></p><p class="mathmultiline">$$
+    \begin{aligned}
+    (\lnot P \lor \lnot F) \land (P \lor B) \land F \land \lnot B
+    &\vDash (\lnot F \lor B) \land F \land \lnot B \\
+    &\vDash \lnot F \land F \\
+    &\vDash False
+    \end{aligned}
+$$</p><p class="paragraph"><span class="span">where for the first step, we assumed that <span class="mathinline">\(P,\lnot F\)</span>.</span></p><p class="paragraph"><span class="span">For applying this rule:</span></p><li class="unorderedlistitem"><span class="span">base case: <span class="mathinline">\(l_1 \land \bar{l_1} \land b \vdash False\)</span></span></li><li class="unorderedlistitem"><span class="span">induction:</span></li><p class="mathmultiline">$$
+    (l_1 \lor \cdots \lor l_i \lor \cdots l_m )
+    \land ({l^\prime}_1 \lor \cdots \lor {l^\prime}_i \lor \cdots {l^\prime}_m)
+    \land b
+    
+    \\ \vdash
+    (l_1 \lor \cdots \lor l_{i-1} \lor l_{i+1} \lor \cdots l_m )
+    \land ({l^\prime}_1 \lor \cdots \lor {l^\prime}_{i-1} \lor {l^\prime}_{i+1} \lor \cdots {l^\prime}_m)
+    
+    \\ = I(l_1 \lor \cdots \lor l_m) \cap I({l^\prime}_1 \lor \cdots \lor {l^\prime}_n) \cap I(b)
+    \\ = I(l_i) \cup I(l_1 \lor \cdots \lor l_{i-1} \lor l_{i+1} \lor \cdots \lor l_m) \cap I({l^\prime}_j) \cup I({l^\prime}_1 \lor \cdots \lor {l^\prime}_{j-1} \lor {l^\prime}_{j+1} \lor \cdots \lor {l^\prime}_n) \cap I(b)
+    \\ = (I(l_i) \cup I(\gamma)) \cap (I(\bar{l}_i) \cup I(\gamma^\prime)) \cap I(b)
+    \\ \subseteq \dots \textit{notes online}
+
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

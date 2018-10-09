@@ -1,0 +1,106 @@
+# Human Logic
+
+::style style/main.css
+
+Want to simulate human logic process in computer.
+
+So, have 3 facts:
+- 1. Australia is in Southern Hemisphere.
+- 2. In Southern Hemisphere, the summer solstice is in Dec.
+- 3. The summer solstice is is the longest day of the year.
+
+*Question*: When is the longest day of the year in Australia.
+
+And can derive "In Southern Hemisphere, the longest day is in December" from 2,3. Then, from that and 1, can derive "in Australia, the longest day of the year is in December".
+
+Now, consider these:
+- If you are a penguin, you can't fly.
+- You can fly.
+
+*Question*: Are you a penguin?
+
+Break into 3 questions:
+- $b$: Are you a bird?
+- $p$: Are you a penguin?
+- $f$: Can you fly?
+
+Imagine the combinations of the answers to these questions as a venn diagram or truth table, assigning $False$ or $True$ based on their possibilty.
+
+$$
+    \begin{cases}
+    b p f &: True \\
+    b p \lnot f &: True \\
+    b \lnot p f &: False \\
+    b \lnot p \lnot f &: False \\
+    \lnot b p f &: False \\
+    \lnot b p \lnot f &: True \\
+    \lnot b \lnot p f &: True \\
+    \lnot b \lnot p \lnot f &: False \\
+    \end{cases}
+$$
+
+Then to answer "if you can fly, are you a bird?", look at worlds where theres a True and $f$. One of these is not a bird, so NO.
+
+To answer "if a bird can't fly, is it a penguin?", look at worlds where there's a True and $\lnot f$. There's only one, which is a bird, so YES.
+
+Can encode the truth table with "I am neither a bird nor a penguin".
+
+## Logic Language
+
+Sentences like the previous sentence can be abstracted in the logic language to look like, for example, $b \land p$. Can't assign a short string to each possible truth table, because for $n$ variables there are $n^{n^2}$ truth tables, and only $26^n$ possible strings of length $n$.
+
+Let $\Sigma$ be an alphabet (signature). For $\Sigma$, the propositional language $\mathcal{L}(\Sigma)$ is the smallest set of strings such that
+
+$$  
+    \begin{cases}
+        \forall \sigma \in \Sigma, \sigma \in \mathcal{L}(\Sigma)
+        \\
+        True, False \in \mathcal{L}(\Sigma)
+        \\
+        \alpha \in \mathcal{L}(\Sigma) \implies \lnot \alpha \in \mathcal{L}(\Sigma)
+        \\
+        \alpha, \beta \in \mathcal{L}(\Sigma) \implies
+            (\alpha \land \beta \in \mathcal{L}(\Sigma)) \land
+            (\alpha \lor \beta \in \mathcal{L}(\Sigma)) \land \\
+            (\alpha \implies \beta \in \mathcal{L}(\Sigma)) \land
+            (\alpha \iff \beta \in \mathcal{L}(\Sigma))
+    \end{cases}
+$$
+
+We refer to this as the "syntax".
+
+## Logic Semantics
+
+This is going to be the meanings.. The *semantic space* ($T(\Sigma)$) is a space of truth tables. But can also define the *model space* ($M(\Sigma)$) as a space of possible worlds. There's a map $\mathcal{L}(\Sigma) \rightarrow \mathcal{P}(M(\Sigma))$ (subsets of $M(\Sigma)$) that connects syntax to semantics. Define a *model* as a function from signature $\Sigma$ to $\{0,1\}$.
+
+The *interpretation* of a sentence in $\mathcal{L}(\Sigma)$ as
+$$
+    I : \mathcal{L}(\Sigma) \rightarrow T(\Sigma) \\
+    I \begin{cases}
+        I(True) = M(\Sigma) \\
+        I(False) = \varnothing \\
+        
+        \forall \sigma \in \Sigma,
+        I(\sigma) = \{ m \in M(\Sigma) \mid m(\sigma) = 1 \} \\
+
+        \forall \alpha \in \mathcal{L},
+        I(\lnot \alpha) = I(True) \setminus I(\alpha) \\
+        
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \land \beta) = I(\alpha) \cap I(\beta) \\
+
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \lor \beta) = I(\alpha) \cup I(\beta) \\
+
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \implies \beta) = I(\lnot \alpha \lor \beta)
+    \end{cases}
+$$
+
+Homework:
+prove DeMorgan's laws
+
+$$
+    I(\lnot(a \lor b)) = I(\lnot a \land \lnot b) \\
+    I(\lnot (a \land b)) = I(\lnot a \lor \lnot b)
+$$

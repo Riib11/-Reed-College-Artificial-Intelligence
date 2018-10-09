@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Heuristics</span></h1><h2 class="h2"><span class="span">Consistency and Admissibility</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A heuristic function <span class="mathinline">\(H\)</span> is <span class="bold">consistent</span> if</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\forall q \in F, H(q) = 0\)</span>.</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\forall q, q^\prime \in Q, (q, \sigma, q^\prime) \in \Delta, H(q) \leq w(q, \sigma, q^\prime) + H(q^\prime)\)</span>.</span></li><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A heuristic function <span class="mathinline">\(H\)</span> is <span class="bold">admissible</span> if <span class="mathinline">\(\forall q \in Q, H(q) \leq H^*(q)\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Theorem</span>. <span class="mathinline">\(A^*\)</span> finds the optimal completion path.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">1</span>. The <span class="mathinline">\(g + h\)</span> value of a node's successor is <span class="mathinline">\(\geq\)</span> the node's <span class="mathinline">\(g + h\)</span> value.</span></p><p class="paragraph"><span class="span"><span class="italic">(proof of 1)</span>. For <span class="mathinline">\(n^\prime \in \text{Successors}_{M,H}(n),\)</span></span></p><p class="mathmultiline">$$
+\begin{aligned}
+    g(n^\prime) + h(n^\prime)
+    &= (g(n) + w(q(n), \sigma, q(n^\prime))) + H(q(n^\prime)) \\
+    &= g(n) + ( w(q(n), \sigma, q(n^\prime)) + H(q(n^\prime)) ) \\
+    &\geq g(n) + H(q(n^\prime)) \\
+    &= g(n) + h(n)
+\end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="bold">2</span>. Search (and Memoized Search) visits nodes in increasing order of their <span class="mathinline">\(g + h\)</span> value.</span></p><p class="paragraph"><span class="span"><span class="italic">(proof of 2)</span>. Let <span class="mathinline">\(n_1, \dots, n_k\)</span> are the search nodes visited. Want: <span class="mathinline">\(k > i \implies g(n_j) + h(n_j) \geq g(n_i) + h(n_i)\)</span>. Assume <span class="mathinline">\(\exists j > i, g(n_j) + h(n_j) < g(n_i) + h(n_i)\)</span>. Note that when we visited <span class="mathinline">\(n_i\)</span>, <span class="mathinline">\(n_j\)</span> was not in the container, but some ancestor <span class="mathinline">\(n\)</span> of <span class="mathinline">\(n_j\)</span> was in the container. Then we know that</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    g(n) + h(n) \leq g(n_j) + h(n_j)
+    < g(n_i) + h(n_i)
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">so we wouldn't have chosen the lineage going down to <span class="mathinline">\(n_j\)</span> before choosing <span class="mathinline">\(n_i\)</span>, and thus such <span class="mathinline">\(i,j\)</span> couldn't exist.</span></p><p class="paragraph"><span class="span"><span class="bold">3</span>. Search (and Memoized Search) visits goal nodes in increasing order of their <span class="mathinline">\(g\)</span> value.</span></p><p class="paragraph"><span class="span"><span class="italic">(proof of 3)</span>. Consider goal nodes. Suppose goan node <span class="mathinline">\(n_i\)</span> is visited before goal node <span class="mathinline">\(n_j\)</span>. Then</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    i < j
+    & \implies g(n_i) + h(n_i) \leq g(n_j) + h(n_j) \\
+    & \implies g(n_i) \leq g(n_i)
+    \leq g(n_j) + h(n_j)
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">1, 2, 3 <span class="mathinline">\(\implies\)</span> the theorem.</span></p><div class="align-right"><span class="span"><span class="mathinline">\(\Box\)</span></span></div><p class="paragraph"><span class="span"><span class="italic">Proposition</span>. For heuristic function <span class="mathinline">\(H\)</span>, <span class="mathinline">\(H\)</span> is consistent <span class="mathinline">\(\implies\)</span> <span class="mathinline">\(H\)</span> is consistent.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>. (Proof by induction on length of optimal completion path).</span></p><p class="paragraph"><span class="span">base case. Let the optimal completion path from state <span class="mathinline">\(q\)</span> have length 0. Then <span class="mathinline">\(H(q) = 0 \leq 0 = H^*(q)\)</span>.</span></p><p class="paragraph"><span class="span">induction step. Assume <span class="mathinline">\(\forall q_2\)</span> where optimal completion path is <span class="mathinline">\(n\)</span> transitions or less, then <span class="mathinline">\(H(q_2) \leq H^*(q_2)\)</span>. We have the path <span class="mathinline">\((q_0, \sigma, q_1), \dots\)</span>.</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    H^*(q)
+    &= w(q, \sigma, q_2) + H^*(q_2) \\
+    &\geq (H(q) - H(q_2)) + H^*(q_2) \\
+    &= H(q) + (H^*(q_2) - H(q_2)) \\
+    &\geq H(q)
+\end{aligned}
+$$</p><div class="align-right"><span class="span"><span class="mathinline">\(\Box\)</span></span></div><h2 class="h2"><span class="span">8-Puzzle</span></h2><p class="paragraph"><span class="span">The setup is something like this:</span></p><p class="mathmultiline">$$
+\begin{array}{|c|c|c|} \hline
+    7 & 2 & 4 \\ \hline
+    5 &   & 6 \\ \hline
+    8 & 3 & 1 \\ \hline
+\end{array}
+
+\rightarrow
+
+\begin{array}{|c|c|c|} \hline
+      & 1 & 2 \\ \hline
+    3 & 4 & 5 \\ \hline
+    6 & 7 & 8 \\ \hline
+\end{array}
+
+$$</p><p class="paragraph"><span class="span">where you are trying to find the moves path from the start to the finish.</span></p><p class="paragraph"><span class="span">For each out-of-place tile, you will need to dedicate at least a move for each distance of the displacement. This is referred to the <span class="bold">Manhattan Distance</span>. The sum of the distances from each tile's start position to its target position is a good heuristic for this puzzle.</span></p><p class="paragraph"><span class="span">A tile can move from position A to B if</span></p><li class="unorderedlistitem"><span class="span">A is adjacent to B</span></li><li class="unorderedlistitem"><span class="span">B is unoccupied</span></li><p class="paragraph"><span class="span">Can make the <span class="italic">misplaced tile</span> heuristic is if you just relax the two conditions to moving.</span></p><p class="paragraph"><span class="span">Can make a different heuristic by removing the condition "A is adjacent to B". Is this a good heuristic? But this one is not as good as the <span class="italic">misplaced tile</span> or <span class="italic">manhattan distance</span>, because the others strictly dominate it (are always less than or equal to it).</span></p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

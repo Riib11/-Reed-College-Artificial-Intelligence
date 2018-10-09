@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Search Algorithms</span></h1><p class="paragraph"><span class="span">Can alter state space to disallow 2-cycles, but making the states incorporate the previous state needed to get to them. e.g.</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    Q &= \{ (w_0, w_1) \mid w_0, w_1 \text{ are dict words of length 5 } \} \\
+    \Sigma &= \{ k \triangleright l \mid k \in [0,4], l \text{ is letter} \} \\
+    \Delta &= \{ (w_0, w_1), k \triangleright l, (w_1, w_2) \mid w_2[k] = l \dots \}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">Basically, there is disallowed to be a transition from your state to another state that has a secondary word the same as your primary word.</span></p><p class="paragraph"><span class="span">So, there are a couple main search algorithms:</span></p><h4 class="h4"><span class="span">Breadth-first</span></h4><li class="unorderedlistitem"><span class="span">uses queue</span></li><li class="unorderedlistitem"><span class="span">best when each trasition costs the same</span></li><h4 class="h4"><span class="span">Depth-first</span></h4><li class="unorderedlistitem"><span class="span">uses stack</span></li><li class="unorderedlistitem"><span class="span">problems with cycles</span></li><h4 class="h4"><span class="span">Uniform-cost seearch</span></h4><li class="unorderedlistitem"><span class="span">uses priority queue</span></li><pre><code><pre class="codemultiline ">Search(M = (Q,S,D,q,F,w)):
+    container := new Container
+    container.put <q0, 0>
+    repeat:
+        if (container is empty): return infinity
+        <q, g> := container.get
+
+Successors(<q, g>):
+    return { <q', g + w(<q, s, q'>)> | s in S, <q, s, q'> in D }
+
+
+</pre></code></pre></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

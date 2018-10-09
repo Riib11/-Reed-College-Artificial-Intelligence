@@ -1,0 +1,63 @@
+# Inference
+
+::style style/main.css
+
+Entails:
+$$
+    a \vDash b := I(b) \subseteq (b)
+$$
+
+Can define logical equivelance ($a \equiv b$) in terms of entails ($\vDash$) in this way:
+$$
+    a \equiv b := (a \vDash b) \land (b \vDash a)
+$$
+
+_Prop 1_. $a \land (a \implies b) \vDash b$.
+_Proof_.
+$$
+    \begin{aligned}
+    I(a \land (a \implies b))
+    &= I(a) \cap I(a \implies b) \\
+    &= I(a) \cap I(\lnot a \lor b) \\
+    &= I(a) \cap (I(\lnot a) \cup I(b)) \\
+    &= (I(a) \cap I(\lnot a)) \cup (I(a) \cup I(b)) \\
+    &= I(a) \cap I(b) \\
+    &\subseteq I(b) \\
+    &\implies a \land (a \implies b) \vDash b
+    \end{aligned}
+$$
+
+_Prop 2_. $a \land b \equiv b \land a$.
+_Proof_.
+$$
+    \begin{aligned}
+    I(a \land b)
+    &= I(a) \cap I(b) \\
+    &= I(b) \cap I(a) \\
+    &= I(b \land b)
+    \end{aligned}
+$$
+
+_Prop 3_.  $(P \implies B) \land P \vDash B$.
+_Proof_.
+$$
+    \begin{aligned}
+    (P \implies B) \land P
+    &\equiv P \land (P \implies B) &\text{[Prop 2]} \\
+    &\vDash B &\text{[Prop 1]}
+    \end{aligned}
+$$
+
+*Theorem 1*. $\forall a,b \in \mathcal{L}(\Sigma), a \vDash b \iff I(a \land \lnot b) = \varnothing$
+_Proof_. Suppose $a \vDash b$. Assume $m \in I(a \land \lnot b)$. Thus $m \in I(a)$ and $m \in I(\lnot b)$, thus $m \not\in I(b)$. Now $a \vDash b$, then $I(a) \subseteq I(b)$, so $\not\exists m^\prime$ such that $m^\prime \in I(a)$ and $m^\prime \not\in I(b)$!
+    For the other direction, suppoes $I(a \land \lnot b) = \varnothing$. Thus $I(a) \cap I(\lnot b) = \varnothing$. Now consider $m \in M$. If not $m \in I(a)$, then $m \not\in I(\lnot b)$. So $m \in I(b)$. Thus $I(a) \subseteq I(b) \implies a \vDash b$.
+
+*Satisfiability*. $a$ is satisfiable if $I(a) \not= \varnothing$.
+
+*Conjunctive Normal Form*: $(\lnot P \lor F) \land (P \lor B) \land (\lnot b \lor \lnot F \lor \lnot P)$. The final term is the _clause_.
+
+For example, in $\Sigma = \{ A_1, \dots, A_n \}$, can have
+$$
+    A_1 \lor \lnot A_3 \lor \lnot A_6
+$$
+

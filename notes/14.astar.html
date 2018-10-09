@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span"><span class="mathinline">\(A^*\)</span></span></h1><p class="paragraph"><span class="span">UCS seems to always find the most optimal solution, but this is not always the case (as least, as efficiently as we'd like).</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A <span class="bold">completion path</span> from state <span class="mathinline">\(q \in Q\)</span> as a sequence of transitions <span class="mathinline">\((d_i, d_k)\)</span> where <span class="mathinline">\(\forall 1 \leq j \leq k, \delta_i \in \Delta,\)</span> and <span class="mathinline">\(\delta_i = (q_i, \sigma_i, q_{i+1})\)</span>, <span class="mathinline">\(q_1 = q_0\)</span>, <span class="mathinline">\(q_{k+1} \in F\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. The <span class="bold">cost</span> of a completion path is the sum of the weights of its transitions.</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. <span class="mathinline">\(H^* : Q \rightarrow \mathbb{R}\)</span> is the cost of the optimal completion path from <span class="mathinline">\(q\)</span>. Then the <span class="bold">hueristic function</span> <span class="mathinline">\(H : Q \rightarrow \mathbb{R}\)</span> is admissible if</span></p><p class="mathmultiline">$$
+    \forall q \in Q, H(q) \leq H^*(q)
+$$</p><p class="paragraph"><span class="span">For memoized search, need something more:</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. <span class="mathinline">\(H\)</span> is <span class="bold">consistent</span> if</span></p><p class="mathmultiline">$$
+    \forall q \in F, H(q) = 0 \\
+    \forall q, q^\prime \in Q \text{ where } (q, \sigma, q^\prime) \in \Delta,
+    H(q) \leq w(q, \sigma, q^\prime) + H(q^\prime)
+$$</p></div></body>
+
+<head><link href="style/main.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

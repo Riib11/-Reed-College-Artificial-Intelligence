@@ -1,0 +1,41 @@
+# Automatic a Satisfaction Solver
+
+::style style/main.css
+::highlight agate
+
+Here's an inefficient algorithm that works:
+
+```python
+
+# unprocessed : Queue
+def satsolve(unprocessed)
+    processed = Queue()
+
+    while processed is empty:
+        clause = unprocessed.pop()
+        for prev in processed:
+            for resolvent in resolve(clause, prev):
+                if not (
+                    (resolvent in processed)
+                    or (resolvent in unprocessed)
+                ):
+                    unprocessed.push(resolvent)
+                if resolvent == False:
+                    return unsatisfiable
+                processed.push(clause)
+    return satisfiable
+
+```
+
+the outer while loop runs at most $3^n$ times.
+
+*Def*. _Resolution Closure_ of a set of clauses $C$. This is referenced as $RC(C)$.
+
+*Thm*. If CNF sentence $c_1 \lor \cdots \lor c_N$ is unsatisfiable, then $\text{False} \in RC(C)$.
+_Proof_. Soppose for the sake of contradiction that $\text{False} \not\in RC(C)$. Construct $l_1 \land \cdots \land l_M$ of literals such that $l_1 \land \cdots \land l_M \vDash c$ for each $c \in RC(C)$. Init $l_0 = \text{True}$. For $m=1$ to $M$, set $l_m \in \{ \sigma_m , \lnot \sigma_m \}$ (if possible) such that
+$$
+    \forall c : \text{ clause } \in RC(C), l_0 \land \cdots \land l_m \not\vDash \lnot c.
+$$
+Otherwise, $l_m = \sigma_m$.
+
+]]] $\Box$

@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">FOL to Propositional Logic</span></h1><p class="paragraph"><span class="span">How to translate from FOL to Propositional Logic.</span></p><p class="paragraph"><span class="span"><span class="bold">Example</span>.</span></p><p class="mathmultiline">$$
+\forall x (\forall y (Animal(y) \implies Loves(x,y)) \implies \exists y (Logives(y,x)))
+$$</p><p class="paragraph"><span class="span"><span class="bold">1</span>. Rewrite implication.</span></p><p class="mathmultiline">$$
+\forall x (\lnot \forall y (Animal(y)) \lor Loves(x,y))
+\lor \exists y (Loves(y,x))
+$$</p><p class="paragraph"><span class="span"><span class="bold">2</span>. Rewrite negative quantifiers.</span></p><p class="mathmultiline">$$
+\forall x (\exists y (Animal(y) \land \lnot Loves(x,y))
+\lor \exists y (Loves(y,x)))
+$$</p><p class="paragraph"><span class="span"><span class="bold">3</span>. Disambiguiate variables</span></p><p class="mathmultiline">$$
+\forall x (\exists y (Animal(y) \land \lnot Loves(x,y))
+\lor \exists z (Loves(z,x)))
+$$</p><p class="paragraph"><span class="span"><span class="bold">4</span>. Rewrite existence quantifiers as functions</span></p><p class="mathmultiline">$$
+\forall x (Animal(F(x)) \lor \lnot Loves(x,F(x)))
+\lor Loves(G(x),x)
+$$</p><p class="paragraph"><span class="span"><span class="bold">5</span>. Push all quantifiers to the left (already done in this example)</span></p><p class="mathmultiline">$$
+\forall x (Animal(F(x)) \lor \lnot Loves(x,F(x)))
+\lor Loves(G(x),x)
+$$</p><p class="paragraph"><span class="span"><span class="bold">6</span>. Eliminate forall quantifiers by replacing with conjunctions of combinations. Say we have <span class="mathinline">\(Alice\)</span> and <span class="mathinline">\(Bob\)</span>.</span></p><p class="mathmultiline">$$
+(Animal(F(Alice)) \lor Loves(G(Alice),Alice)) \\
+\lor (\lnot Loves(Alice),F(Alice) \lor Loves(G(Alice),Alice)) \\
+    \lor \\
+(Animal(F(Bob)) \lor Loves(G(Bob),Bob)) \\
+\lor (\lnot Loves(Bob),F(Bob) \lor Loves(G(Bob),Bob))
+$$</p><p class="paragraph"><span class="span"><span class="bold">7</span>. Replace function invocations with names</span></p><p class="mathmultiline">$$
+(\text{Animal-F-Alice} \lor \text{Loves-G-Alice-Alice}) \\
+\lor (\lnot \text{Loves-Alice-F-Alice} \lor \text{Loves-G-Alice-Alice}) \\
+    \lor \\
+(\text{Animal-F-Bob} \lor \text{Loves-G-Bob-Bob}) \\
+\lor (\lnot \text{Loves-Bob-F-Bob} \lor \text{Loves-G-Bob-Bob})
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

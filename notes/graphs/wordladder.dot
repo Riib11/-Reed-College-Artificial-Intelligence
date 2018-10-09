@@ -1,0 +1,9 @@
+digraph {
+    TRAIN -> BRAIN [label="1B"]
+    BRAIN -> BRAWN [label="4W"]
+    BRAWN -> BRAWL [label="5L"]
+    BRAWL -> TRAWL [label="1T"]
+    TRAWL -> TRAIL [label="4I"]
+    TRAIN -> TRAIL [label="5L"]
+
+}

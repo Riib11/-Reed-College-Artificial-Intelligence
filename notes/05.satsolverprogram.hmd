@@ -1,0 +1,5 @@
+# Programming the Satisfaction Solver
+
+::style style/main.css
+
+Professor wrote code for class. _Resolution_ is good for solving clauses with a high `clauses/number of symbols` ratio.

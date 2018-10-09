@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Human Logic</span></h1><p class="paragraph"><span class="span">Want to simulate human logic process in computer.</span></p><p class="paragraph"><span class="span">So, have 3 facts:</span></p><li class="unorderedlistitem"><span class="span">1. Australia is in Southern Hemisphere.</span></li><li class="unorderedlistitem"><span class="span">2. In Southern Hemisphere, the summer solstice is in Dec.</span></li><li class="unorderedlistitem"><span class="span">3. The summer solstice is is the longest day of the year.</span></li><p class="paragraph"><span class="span"><span class="bold">Question</span>: When is the longest day of the year in Australia.</span></p><p class="paragraph"><span class="span">And can derive "In Southern Hemisphere, the longest day is in December" from 2,3. Then, from that and 1, can derive "in Australia, the longest day of the year is in December".</span></p><p class="paragraph"><span class="span">Now, consider these:</span></p><li class="unorderedlistitem"><span class="span">If you are a penguin, you can't fly.</span></li><li class="unorderedlistitem"><span class="span">You can fly.</span></li><p class="paragraph"><span class="span"><span class="bold">Question</span>: Are you a penguin?</span></p><p class="paragraph"><span class="span">Break into 3 questions:</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(b\)</span>: Are you a bird?</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(p\)</span>: Are you a penguin?</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(f\)</span>: Can you fly?</span></li><p class="paragraph"><span class="span">Imagine the combinations of the answers to these questions as a venn diagram or truth table, assigning <span class="mathinline">\(False\)</span> or <span class="mathinline">\(True\)</span> based on their possibilty.</span></p><p class="mathmultiline">$$
+    \begin{cases}
+    b p f &: True \\
+    b p \lnot f &: True \\
+    b \lnot p f &: False \\
+    b \lnot p \lnot f &: False \\
+    \lnot b p f &: False \\
+    \lnot b p \lnot f &: True \\
+    \lnot b \lnot p f &: True \\
+    \lnot b \lnot p \lnot f &: False \\
+    \end{cases}
+$$</p><p class="paragraph"><span class="span">Then to answer "if you can fly, are you a bird?", look at worlds where theres a True and <span class="mathinline">\(f\)</span>. One of these is not a bird, so NO.</span></p><p class="paragraph"><span class="span">To answer "if a bird can't fly, is it a penguin?", look at worlds where there's a True and <span class="mathinline">\(\lnot f\)</span>. There's only one, which is a bird, so YES.</span></p><p class="paragraph"><span class="span">Can encode the truth table with "I am neither a bird nor a penguin".</span></p><h2 class="h2"><span class="span">Logic Language</span></h2><p class="paragraph"><span class="span">Sentences like the previous sentence can be abstracted in the logic language to look like, for example, <span class="mathinline">\(b \land p\)</span>. Can't assign a short string to each possible truth table, because for <span class="mathinline">\(n\)</span> variables there are <span class="mathinline">\(n^{n^2}\)</span> truth tables, and only <span class="mathinline">\(26^n\)</span> possible strings of length <span class="mathinline">\(n\)</span>.</span></p><p class="paragraph"><span class="span">Let <span class="mathinline">\(\Sigma\)</span> be an alphabet (signature). For <span class="mathinline">\(\Sigma\)</span>, the propositional language <span class="mathinline">\(\mathcal{L}(\Sigma)\)</span> is the smallest set of strings such that</span></p><p class="mathmultiline">$$
+    \begin{cases}
+        \forall \sigma \in \Sigma, \sigma \in \mathcal{L}(\Sigma)
+        \\
+        True, False \in \mathcal{L}(\Sigma)
+        \\
+        \alpha \in \mathcal{L}(\Sigma) \implies \lnot \alpha \in \mathcal{L}(\Sigma)
+        \\
+        \alpha, \beta \in \mathcal{L}(\Sigma) \implies
+            (\alpha \land \beta \in \mathcal{L}(\Sigma)) \land
+            (\alpha \lor \beta \in \mathcal{L}(\Sigma)) \land \\
+            (\alpha \implies \beta \in \mathcal{L}(\Sigma)) \land
+            (\alpha \iff \beta \in \mathcal{L}(\Sigma))
+    \end{cases}
+$$</p><p class="paragraph"><span class="span">We refer to this as the "syntax".</span></p><h2 class="h2"><span class="span">Logic Semantics</span></h2><p class="paragraph"><span class="span">This is going to be the meanings.. The <span class="bold">semantic space</span> (<span class="mathinline">\(T(\Sigma)\)</span>) is a space of truth tables. But can also define the <span class="bold">model space</span> (<span class="mathinline">\(M(\Sigma)\)</span>) as a space of possible worlds. There's a map <span class="mathinline">\(\mathcal{L}(\Sigma) \rightarrow \mathcal{P}(M(\Sigma))\)</span> (subsets of <span class="mathinline">\(M(\Sigma)\)</span>) that connects syntax to semantics. Define a <span class="bold">model</span> as a function from signature <span class="mathinline">\(\Sigma\)</span> to <span class="mathinline">\(\{0,1\}\)</span>.</span></p><p class="paragraph"><span class="span">The <span class="bold">interpretation</span> of a sentence in <span class="mathinline">\(\mathcal{L}(\Sigma)\)</span> as</span></p><p class="mathmultiline">$$
+    I : \mathcal{L}(\Sigma) \rightarrow T(\Sigma) \\
+    I \begin{cases}
+        I(True) = M(\Sigma) \\
+        I(False) = \varnothing \\
+        
+        \forall \sigma \in \Sigma,
+        I(\sigma) = \{ m \in M(\Sigma) \mid m(\sigma) = 1 \} \\
+
+        \forall \alpha \in \mathcal{L},
+        I(\lnot \alpha) = I(True) \setminus I(\alpha) \\
+        
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \land \beta) = I(\alpha) \cap I(\beta) \\
+
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \lor \beta) = I(\alpha) \cup I(\beta) \\
+
+        \forall \alpha, \beta \in \mathcal{L},
+        I(\alpha \implies \beta) = I(\lnot \alpha \lor \beta)
+    \end{cases}
+$$</p><p class="paragraph"><span class="span">Homework:</span></p><p class="paragraph"><span class="span">prove DeMorgan's laws</span></p><p class="mathmultiline">$$
+    I(\lnot(a \lor b)) = I(\lnot a \land \lnot b) \\
+    I(\lnot (a \land b)) = I(\lnot a \lor \lnot b)
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

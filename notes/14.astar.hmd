@@ -1,0 +1,23 @@
+# $A^*$
+
+::style style/main.css
+
+UCS seems to always find the most optimal solution, but this is not always the case (as least, as efficiently as we'd like).
+
+_Definition_. A *completion path* from state $q \in Q$ as a sequence of transitions $(d_i, d_k)$ where $\forall 1 \leq j \leq k, \delta_i \in \Delta,$ and $\delta_i = (q_i, \sigma_i, q_{i+1})$, $q_1 = q_0$, $q_{k+1} \in F$.
+
+_Definition_. The *cost* of a completion path is the sum of the weights of its transitions.
+
+_Definition_. $H^* : Q \rightarrow \mathbb{R}$ is the cost of the optimal completion path from $q$. Then the *hueristic function* $H : Q \rightarrow \mathbb{R}$ is admissible if
+$$
+    \forall q \in Q, H(q) \leq H^*(q)
+$$
+
+For memoized search, need something more:
+
+_Definition_. $H$ is *consistent* if
+$$
+    \forall q \in F, H(q) = 0 \\
+    \forall q, q^\prime \in Q \text{ where } (q, \sigma, q^\prime) \in \Delta,
+    H(q) \leq w(q, \sigma, q^\prime) + H(q^\prime)
+$$

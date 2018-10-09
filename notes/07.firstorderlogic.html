@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">First Order Logic</span></h1><h2 class="h2"><span class="span">House Puzzle</span></h2><p class="paragraph"><span class="span">Information:</span></p><li class="unorderedlistitem"><span class="span">Dane, Norwegian, Swede live in three houses</span></li><li class="unorderedlistitem"><span class="span">No houses are painted same color</span></li><li class="unorderedlistitem"><span class="span">Each house painted one color</span></li><li class="unorderedlistitem"><span class="span">Nobody lives in same house</span></li><li class="unorderedlistitem"><span class="span">The Dane lives directly to the right of hte red house</span></li><li class="unorderedlistitem"><span class="span">THe Norwegian lives in blue house</span></li><p class="paragraph"><span class="span"><span class="italic">Question</span>: What color is the Swede's house?</span></p><p class="paragraph"><span class="span">To represent "No houses are painted same color" this in propositional logic, write</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \text{House1Blue } &\implies \lnot \text{House2Blue} \land \lnot \text{House3Blue} \\
+    \text{House1Red } &\implies \lnot \text{House2Red} \land \lnot \text{House3Red} \\
+    &\dots
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">and we need <span class="mathinline">\(m \cdot n\)</span> statements to finish this, where <span class="mathinline">\(m\)</span> is houses and <span class="mathinline">\(n\)</span> is colors.</span></p><p class="paragraph"><span class="span">What would make this easier? Introduction <span class="bold">object</span>s. For example, in "If <span class="bold">I</span> am to <span class="bold">your</span> right, then <span class="bold">you</span> are to <span class="bold">my</span> left" there are two objects: me and you.</span></p><h2 class="h2"><span class="span">First Order Logic</span></h2><p class="paragraph"><span class="span">Have <span class="bold">Syntax</span>, <span class="bold">Semantics</span>, and <span class="bold">Interpretation</span> that maps each instance of syntax into semantic space (power set of possible worlds). Maintain that</span></p><p class="mathmultiline">$$
+    a \vDash b \iff I(a) \subseteq I(b)
+$$</p><p class="paragraph"><span class="span"><span class="italic">Domain of Discourse</span> <span class="mathinline">\(D\)</span> is a set of objects. Objects are <span class="italic">distinct</span> from their names that reference them. Let <span class="mathinline">\(F = \{ F_0, F_1, \dots \}\)</span> where <span class="mathinline">\(F_i\)</span> represents a function with <span class="mathinline">\(i\)</span> arguments: <span class="mathinline">\(F_i : D \times \cdots_{i} \times D \rightarrow D\)</span>. Can say that a sort of <span class="italic">literal</span> has type <span class="mathinline">\(F_0\)</span>, which is a constant mapping to <span class="mathinline">\(D\)</span>. And can have a <span class="italic">function</span> of 1 name and has type <span class="mathinline">\(F_1\)</span>, takes one name and maps to <span class="mathinline">\(D\)</span>.</span></p><p class="paragraph"><span class="span">Can be nice to have a null object in <span class="mathinline">\(D\)</span> to map to when your predicate isn't really supposed to apply to a name. Like if you have object <span class="italic">Redness</span>, then <code class="codeinline">ColorOf(Redness)</code> shouldn't really apply, so we'll have <code class="codeinline">ColorOf(Redness) = null</code> (italic means its the object, non-italic means its the name).</span></p><p class="paragraph"><span class="span">Also have <span class="mathinline">\(P_i \subseteq D \times \cdots_i \times D\)</span> where <span class="mathinline">\(P_i\)</span> is a predicate of <span class="mathinline">\(i\)</span> names.</span></p><p class="paragraph"><span class="span">Consider this situation:</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \Sigma_{PL} &= \{ \text{Bird, Penguin, Fly} \} \\
+    \Sigma_{FOL} &= \{
+        \text{Alice} : F_0, \text{Bob} : F_0, \text{Debbie} : F_0,
+        \text{Bird} : P_1, \text{Penguin} : P_1, \text{Fly} : P_1,
+        \text{ChildOf} : P_2
+    \}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">And have objects <span class="mathinline">\(A,B,C,D,E\)</span>.</span></p><p class="paragraph"><span class="span">We have</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \text{Alice} &\mapsto A \\
+    \text{Bob} &\mapsto B \\
+    \text{Debbie} &\mapsto C \\
+    \text{Bird} &= \{ A,B,C,N \} \\
+    \text{Penguin} &= \{ A,B,N \} \\
+    \text{Fly} &= \{ C \} \\
+    \text{ChildOf} &= \{ (B,C), (N,A) \}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">A model <span class="mathinline">\(m \in M_{FOL}(\Sigma, D)\)</span> is a function such that</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \forall f \in F_k ,
+        m(f) &: D \times \cdots \times D \rightarrow D \\
+    \forall p \in P_k,
+        m(p) &\subseteq D \times \cdots \times D
+\end{aligned}
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

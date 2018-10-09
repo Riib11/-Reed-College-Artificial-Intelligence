@@ -1,0 +1,48 @@
+# Working with First Order Logic models
+
+::style style/main.css
+
+The function $m$, "model of".
+
+For $\sigma \in \Sigma$ such that $\sigma$ has type $F_k$, $m(\sigma)$ is a function $D \times \cdots_{k} \times D \rightarrow D$.
+
+For $\sigma \in \Sigma$ such that $\sigma$ has type $P_k$, $m(\sigma)$ is a subset of $D \times \cdots_{k} \times D$.
+
+*Examples*.
+- $m(\text{Alice}) = \{ \mapsto \text{Alice} \}$
+- $m(\text{BiologicalMother}) = \{ \mapsto \text{<Alice>}, \mapsto \text{<Bob>} \}$
+- $m(\text{Bird}) = \{ \text{<Alice>}, \text{<Bob>} \}$
+
+
+*Define*. Assume access to a global set of $X$ variables. The set of *terms* of a $\Sigma$ is $\mathcal{T}(\Sigma)$, which is defined as the smallest set of strings such that
+- $X \subset \mathcal{T}(\Sigma)$
+- if $t_1, \dots, t_k \in \mathcal{T}(\Sigma)$ and $f \in F_k(\Sigma),$ then $f(t_1, \dots, t_k) \in \mathcal{T}(\Sigma)$.
+
+*Define*. The language $\mathcal{L}_{FOL}(\Sigma)$ is the smallest set such that
+- $True, False \in \mathcal{L}_{FOL}(\Sigma)$
+- if $t_1, t_2 \in \mathcal{T}(\Sigma)$, then $t_1 = t_2 \in \mathcal{L}(\Sigma)$
+- if $t_1, \dots, t_k \in \mathcal{T}(\Sigma)$ and $p \in P_k(\Sigma)$, then $p(t_1, \dots, t_k) \in \mathcal{L}(\Sigma)$.
+- if $\alpha, \beta \in \mathcal{L}(\Sigma),$ then $(\alpha \land \beta)$
+- if $\alpha \in \mathcal{L}(\Sigma)$ and $x \in X,$ then: $\forall x \alpha \in \mathcal{L}(\Sigma)$ and $\exists x \alpha \in \mathcal{L}(\Sigma)$
+
+*Example*. Take the statement $\forall x, \text{Penguin}(x) \implies \text{Bird}(x)$. Then
+$$
+\begin{aligned}
+    I(\forall x, \text{P}(x) \implies \text{B}(x)) \\
+    &= \bigcap_{d \in D} I_{x \mapsto d} (P(x) \implies B(x)) \\
+    &= \bigcap_{d \in D} I_{x \mapsto d} (\lnot P(x) \lor B(x)) \\
+    &= \bigcap_{d \in D} ( I_{x \mapsto d}(\lnot P(x)) \cup I_{x \mapsto d}(B(x)) ) \\
+    &= \bigcap_{d \in D} ( \overline{I_{x \mapsto d}(\lnot P(x))} \cup I_{x \mapsto d}(B(x)) ) \\
+    &= \bigcap_{d \in D} \{ m \in M_{FOL}(\Sigma, D) \mid \bigcup \{ m \in M_{FOL}(\Sigma, D) \mid \text{<d>} \in m(B) \} \text{<d>} \not\in m(P) \}
+\end{aligned}
+$$
+
+*Homework*
+$$
+\begin{aligned}
+    \forall x, Q(x) &\equiv \lnot \exists x \lnot Q(x) \\
+    I(\forall x, Q(x)) &= \bigcap_{d \in D} I_{x \mapsto d} (Q(x)) \\
+    &= \dots \\
+    &= I(\lnot \exists x \lnot Q(x))
+\end{aligned}
+$$

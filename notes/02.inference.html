@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Inference</span></h1><p class="paragraph"><span class="span">Entails:</span></p><p class="mathmultiline">$$
+    a \vDash b := I(b) \subseteq (b)
+$$</p><p class="paragraph"><span class="span">Can define logical equivelance (<span class="mathinline">\(a \equiv b\)</span>) in terms of entails (<span class="mathinline">\(\vDash\)</span>) in this way:</span></p><p class="mathmultiline">$$
+    a \equiv b := (a \vDash b) \land (b \vDash a)
+$$</p><p class="paragraph"><span class="span"><span class="italic">Prop 1</span>. <span class="mathinline">\(a \land (a \implies b) \vDash b\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>.</span></p><p class="mathmultiline">$$
+    \begin{aligned}
+    I(a \land (a \implies b))
+    &= I(a) \cap I(a \implies b) \\
+    &= I(a) \cap I(\lnot a \lor b) \\
+    &= I(a) \cap (I(\lnot a) \cup I(b)) \\
+    &= (I(a) \cap I(\lnot a)) \cup (I(a) \cup I(b)) \\
+    &= I(a) \cap I(b) \\
+    &\subseteq I(b) \\
+    &\implies a \land (a \implies b) \vDash b
+    \end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="italic">Prop 2</span>. <span class="mathinline">\(a \land b \equiv b \land a\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>.</span></p><p class="mathmultiline">$$
+    \begin{aligned}
+    I(a \land b)
+    &= I(a) \cap I(b) \\
+    &= I(b) \cap I(a) \\
+    &= I(b \land b)
+    \end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="italic">Prop 3</span>.  <span class="mathinline">\((P \implies B) \land P \vDash B\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>.</span></p><p class="mathmultiline">$$
+    \begin{aligned}
+    (P \implies B) \land P
+    &\equiv P \land (P \implies B) &\text{[Prop 2]} \\
+    &\vDash B &\text{[Prop 1]}
+    \end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="bold">Theorem 1</span>. <span class="mathinline">\(\forall a,b \in \mathcal{L}(\Sigma), a \vDash b \iff I(a \land \lnot b) = \varnothing\)</span></span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>. Suppose <span class="mathinline">\(a \vDash b\)</span>. Assume <span class="mathinline">\(m \in I(a \land \lnot b)\)</span>. Thus <span class="mathinline">\(m \in I(a)\)</span> and <span class="mathinline">\(m \in I(\lnot b)\)</span>, thus <span class="mathinline">\(m \not\in I(b)\)</span>. Now <span class="mathinline">\(a \vDash b\)</span>, then <span class="mathinline">\(I(a) \subseteq I(b)\)</span>, so <span class="mathinline">\(\not\exists m^\prime\)</span> such that <span class="mathinline">\(m^\prime \in I(a)\)</span> and <span class="mathinline">\(m^\prime \not\in I(b)\)</span>!</span></p><p class="paragraph"><span class="span">For the other direction, suppoes <span class="mathinline">\(I(a \land \lnot b) = \varnothing\)</span>. Thus <span class="mathinline">\(I(a) \cap I(\lnot b) = \varnothing\)</span>. Now consider <span class="mathinline">\(m \in M\)</span>. If not <span class="mathinline">\(m \in I(a)\)</span>, then <span class="mathinline">\(m \not\in I(\lnot b)\)</span>. So <span class="mathinline">\(m \in I(b)\)</span>. Thus <span class="mathinline">\(I(a) \subseteq I(b) \implies a \vDash b\)</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">Satisfiability</span>. <span class="mathinline">\(a\)</span> is satisfiable if <span class="mathinline">\(I(a) \not= \varnothing\)</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">Conjunctive Normal Form</span>: <span class="mathinline">\((\lnot P \lor F) \land (P \lor B) \land (\lnot b \lor \lnot F \lor \lnot P)\)</span>. The final term is the <span class="italic">clause</span>.</span></p><p class="paragraph"><span class="span">For example, in <span class="mathinline">\(\Sigma = \{ A_1, \dots, A_n \}\)</span>, can have</span></p><p class="mathmultiline">$$
+    A_1 \lor \lnot A_3 \lor \lnot A_6
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

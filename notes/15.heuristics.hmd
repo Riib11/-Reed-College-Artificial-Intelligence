@@ -1,0 +1,108 @@
+# Heuristics
+
+::style style/main.css
+
+## Consistency and Admissibility
+
+_Definition_. A heuristic function $H$ is *consistent* if
+- $\forall q \in F, H(q) = 0$.
+- $\forall q, q^\prime \in Q, (q, \sigma, q^\prime) \in \Delta, H(q) \leq w(q, \sigma, q^\prime) + H(q^\prime)$.
+
+_Definition_. A heuristic function $H$ is *admissible* if $\forall q \in Q, H(q) \leq H^*(q)$.
+
+_Theorem_. $A^*$ finds the optimal completion path.
+
+_Proof_.
+
+*1*. The $g + h$ value of a node's successor is $\geq$ the node's $g + h$ value.
+
+_(proof of 1)_. For $n^\prime \in \text{Successors}_{M,H}(n),$
+$$
+\begin{aligned}
+    g(n^\prime) + h(n^\prime)
+    &= (g(n) + w(q(n), \sigma, q(n^\prime))) + H(q(n^\prime)) \\
+    &= g(n) + ( w(q(n), \sigma, q(n^\prime)) + H(q(n^\prime)) ) \\
+    &\geq g(n) + H(q(n^\prime)) \\
+    &= g(n) + h(n)
+\end{aligned}
+$$
+
+*2*. Search (and Memoized Search) visits nodes in increasing order of their $g + h$ value.
+
+_(proof of 2)_. Let $n_1, \dots, n_k$ are the search nodes visited. Want: $k > i \implies g(n_j) + h(n_j) \geq g(n_i) + h(n_i)$. Assume $\exists j > i, g(n_j) + h(n_j) < g(n_i) + h(n_i)$. Note that when we visited $n_i$, $n_j$ was not in the container, but some ancestor $n$ of $n_j$ was in the container. Then we know that
+$$
+\begin{aligned}
+    g(n) + h(n) \leq g(n_j) + h(n_j)
+    < g(n_i) + h(n_i)
+\end{aligned}
+$$ 
+
+so we wouldn't have chosen the lineage going down to $n_j$ before choosing $n_i$, and thus such $i,j$ couldn't exist.
+
+*3*. Search (and Memoized Search) visits goal nodes in increasing order of their $g$ value.
+
+_(proof of 3)_. Consider goal nodes. Suppose goan node $n_i$ is visited before goal node $n_j$. Then
+$$
+\begin{aligned}
+    i < j
+    & \implies g(n_i) + h(n_i) \leq g(n_j) + h(n_j) \\
+    & \implies g(n_i) \leq g(n_i)
+    \leq g(n_j) + h(n_j)
+\end{aligned}
+$$
+
+1, 2, 3 $\implies$ the theorem.
+
+]]] $\Box$
+
+_Proposition_. For heuristic function $H$, $H$ is consistent $\implies$ $H$ is consistent.
+
+_Proof_. (Proof by induction on length of optimal completion path).
+
+base case. Let the optimal completion path from state $q$ have length 0. Then $H(q) = 0 \leq 0 = H^*(q)$.
+
+induction step. Assume $\forall q_2$ where optimal completion path is $n$ transitions or less, then $H(q_2) \leq H^*(q_2)$. We have the path $(q_0, \sigma, q_1), \dots$.
+$$
+\begin{aligned}
+    H^*(q)
+    &= w(q, \sigma, q_2) + H^*(q_2) \\
+    &\geq (H(q) - H(q_2)) + H^*(q_2) \\
+    &= H(q) + (H^*(q_2) - H(q_2)) \\
+    &\geq H(q)
+\end{aligned}
+$$
+
+]]] $\Box$
+
+## 8-Puzzle
+
+The setup is something like this:
+
+$$
+\begin{array}{|c|c|c|} \hline
+    7 & 2 & 4 \\ \hline
+    5 &   & 6 \\ \hline
+    8 & 3 & 1 \\ \hline
+\end{array}
+
+\rightarrow
+
+\begin{array}{|c|c|c|} \hline
+      & 1 & 2 \\ \hline
+    3 & 4 & 5 \\ \hline
+    6 & 7 & 8 \\ \hline
+\end{array}
+
+$$
+
+where you are trying to find the moves path from the start to the finish.
+
+For each out-of-place tile, you will need to dedicate at least a move for each distance of the displacement. This is referred to the *Manhattan Distance*. The sum of the distances from each tile's start position to its target position is a good heuristic for this puzzle.
+
+A tile can move from position A to B if
+- A is adjacent to B
+- B is unoccupied
+
+Can make the _misplaced tile_ heuristic is if you just relax the two conditions to moving.
+
+Can make a different heuristic by removing the condition "A is adjacent to B". Is this a good heuristic? But this one is not as good as the _misplaced tile_ or _manhattan distance_, because the others strictly dominate it (are always less than or equal to it).

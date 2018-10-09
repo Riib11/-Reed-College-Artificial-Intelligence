@@ -1,0 +1,17 @@
+# Efficient Satisfaction Solver
+
+::style style/main.css
+
+To generate an $n$-CNF, can think of it as first generating an $(n-1)$-CNF and then for each clause $c_i$ adding another letter $l_i$ to the disjunction. We also get that
+$$
+    I(c_i) \subseteq I(c_i \lor l_i) \\
+    \bigcap_i I(c_i) \subseteq \bigcap_i I(c_i \lor l_i)
+$$
+
+## DPLL
+
+Combining search and resolution. *Unit* resolution propogation. Pick only the options that you have to (like at the beginning, a symbol that only appears in one clause). Then, keep a running record of resolving this pathway with everything you have to, until done
+
+But what if this not good enough? What if you end up going down the wrong path to an unsatisfiable? So, to solve this, whenever you know a Truth for sure, then you can just take a path with that, not having to make a choice that could potentially fail you.
+
+Check textbook for details

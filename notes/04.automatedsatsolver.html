@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Automatic a Satisfaction Solver</span></h1><p class="paragraph"><span class="span">Here's an inefficient algorithm that works:</span></p><pre><code><pre class="codemultiline python">
+# unprocessed : Queue
+def satsolve(unprocessed)
+    processed = Queue()
+
+    while processed is empty:
+        clause = unprocessed.pop()
+        for prev in processed:
+            for resolvent in resolve(clause, prev):
+                if not (
+                    (resolvent in processed)
+                    or (resolvent in unprocessed)
+                ):
+                    unprocessed.push(resolvent)
+                if resolvent == False:
+                    return unsatisfiable
+                processed.push(clause)
+    return satisfiable
+</pre></code></pre><p class="paragraph"><span class="span">the outer while loop runs at most <span class="mathinline">\(3^n\)</span> times.</span></p><p class="paragraph"><span class="span"><span class="bold">Def</span>. <span class="italic">Resolution Closure</span> of a set of clauses <span class="mathinline">\(C\)</span>. This is referenced as <span class="mathinline">\(RC(C)\)</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">Thm</span>. If CNF sentence <span class="mathinline">\(c_1 \lor \cdots \lor c_N\)</span> is unsatisfiable, then <span class="mathinline">\(\text{False} \in RC(C)\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Proof</span>. Soppose for the sake of contradiction that <span class="mathinline">\(\text{False} \not\in RC(C)\)</span>. Construct <span class="mathinline">\(l_1 \land \cdots \land l_M\)</span> of literals such that <span class="mathinline">\(l_1 \land \cdots \land l_M \vDash c\)</span> for each <span class="mathinline">\(c \in RC(C)\)</span>. Init <span class="mathinline">\(l_0 = \text{True}\)</span>. For <span class="mathinline">\(m=1\)</span> to <span class="mathinline">\(M\)</span>, set <span class="mathinline">\(l_m \in \{ \sigma_m , \lnot \sigma_m \}\)</span> (if possible) such that</span></p><p class="mathmultiline">$$
+    \forall c : \text{ clause } \in RC(C), l_0 \land \cdots \land l_m \not\vDash \lnot c.
+$$</p><p class="paragraph"><span class="span">Otherwise, <span class="mathinline">\(l_m = \sigma_m\)</span>.</span></p><div class="align-right"><span class="span"><span class="mathinline">\(\Box\)</span></span></div></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css"><link rel="stylesheet" type="text/css" href="highlight/styles/agate.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

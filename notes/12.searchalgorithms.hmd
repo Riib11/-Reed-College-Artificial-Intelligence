@@ -1,0 +1,43 @@
+# Search Algorithms
+
+::style style/main.css
+
+Can alter state space to disallow 2-cycles, but making the states incorporate the previous state needed to get to them. e.g.
+
+$$
+\begin{aligned}
+    Q &= \{ (w_0, w_1) \mid w_0, w_1 \text{ are dict words of length 5 } \} \\
+    \Sigma &= \{ k \triangleright l \mid k \in [0,4], l \text{ is letter} \} \\
+    \Delta &= \{ (w_0, w_1), k \triangleright l, (w_1, w_2) \mid w_2[k] = l \dots \}
+\end{aligned}
+$$
+
+Basically, there is disallowed to be a transition from your state to another state that has a secondary word the same as your primary word.
+
+So, there are a couple main search algorithms:
+
+#### Breadth-first
+- uses queue
+- best when each trasition costs the same
+
+#### Depth-first
+- uses stack
+- problems with cycles
+
+#### Uniform-cost seearch
+- uses priority queue
+
+```
+Search(M = (Q,S,D,q,F,w)):
+    container := new Container
+    container.put <q0, 0>
+    repeat:
+        if (container is empty): return infinity
+        <q, g> := container.get
+
+Successors(<q, g>):
+    return { <q', g + w(<q, s, q'>)> | s in S, <q, s, q'> in D }
+
+
+
+```

@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Searching - Continued</span></h1><h2 class="h2"><span class="span">Optimizing Search</span></h2><p class="paragraph"><span class="span">To search without revisiting states:</span></p><pre><code><pre class="codemultiline python">Search(M = (Q, S, D, q0, F, w)):
+    container = new Container()
+    container.put((q0, 0))
+    visited = {} # keep track of visited to
+                 # avoid revisiting
+    repeat:
+        if container.empty: return infinity
+        n = container.get()
+        if q(n) in F: return q(n)
+        Visit(n, container)
+
+Visit(n, container, M):
+    if not q(n) in visited:
+        for n' in Successors(M, n):
+            if not q(n') in visited:
+                container.put(n')
+
+Successors(M, (q, g)) :=
+    { < q', g + w(q, s, q') >
+    | s in S, (q, s, q') in D }</pre></code></pre><h2 class="h2"><span class="span">Measuring Efficiency</span></h2><p class="paragraph"><span class="span">In AI, there's a little different conception of efficiency. It isn't satisfactory just to say, for example "linear in size of graph", because sometimes our graphs will have billions of nodes (or infinite).</span></p><li class="unorderedlistitem"><span class="span"><span class="bold">Branching Factor</span>: the maximum number of out-edges of a single node, among nodes in graph:</span></li><p class="mathmultiline">$$
+    \text{max}_q \left| \{ q^\prime \mid (q, \sigma, q^\prime) \in \Delta, \sigma \in \Sigma \} \right|
+    % \text{max}_q \left| \right|
+$$</p><li class="unorderedlistitem"><span class="span"><span class="bold">Maximum Depth</span>: Maximum-length traversal of graph</span></li><li class="unorderedlistitem"><span class="span"><span class="bold">Solution Depth</span>: Maximum number of transitions from start to goal.</span></li><p class="paragraph"><span class="span">In <span class="italic">Word Ladder</span>, we have 3, <span class="mathinline">\(\infty\)</span>, 3 respectively.</span></p><p class="paragraph"><span class="span">In <span class="italic">N-Queens</span>, we have <span class="mathinline">\(n\)</span>, <span class="mathinline">\(n\)</span>, <span class="mathinline">\(n\)</span> respectively.</span></p></div></body>
+
+<head><link href="style/main.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

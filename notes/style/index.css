@@ -1,0 +1,137 @@
+@font-face {
+    font-family: themify;
+    src: url(../font/themify.woff);
+}
+
+:root {
+    container-width: 100%;
+}
+
+html {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#container {
+    width: var(--container-width);
+    margin: auto;
+    box-shadow:
+        -1px 0px 0px 0px black,
+         1px 0px 0px 0px black;
+
+    background-color: white;
+}
+
+#header {
+    /*background-color: #D9D9D9;*/
+    background-image: url(../assets/ghosts.png);
+    background-position: 0px 0px;
+    background-size: 100% 800px;
+    background-repeat: space;
+    opacity: 0.6;
+    height: 420px;
+}
+
+#header .layer {
+    background-color: rgba(0,0,0, 0.3);
+    width: var(--container-width);
+    height: 100%;
+}
+
+#title-container {
+    position: absolute;
+    top: 120px;
+    width: 100%;
+    margin: auto;
+    font-family: menlo;
+}
+
+#title-container .title {
+    font-size: 36pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+#title-container .subtitle {
+    margin-top: 40px;
+    font-size: 24pt;
+    font-weight: bold;
+    text-align: center;
+}
+
+#content {
+    padding-bottom: 100px;
+    padding-top: 20px;
+    margin: auto;
+    font-family: themify;
+}
+
+#notes-container {
+    width: 700px;
+    /*padding-left: 20px;*/
+    margin: auto;
+}
+
+#notes-container .title {
+    font-weight: bold;
+    font-size: 25pt;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#notes-container .note-container {
+    display: block;
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-bottom: 20px;
+
+    color: white;
+    background-color: #6A6262;
+
+    transition: 0.2s;
+}
+
+#notes-container .note-container:hover {
+    background-color: #988D8D;
+}
+
+#notes-container .note-title {
+
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+#footer {
+    width: 100%;
+    /*height: 400px;*/
+    text-align: center;
+
+    font-family: themify;
+    background-color: #6A6262;
+
+}
+
+#footer .outlink {
+    padding-top: 100px;
+    color: white;
+}
+
+#footer .credits {
+    padding-top: 50px;
+    padding-bottom: 100px;
+    color: white;
+}
+
+#footer a {
+    text-decoration: underline;
+}

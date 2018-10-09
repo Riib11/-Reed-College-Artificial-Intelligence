@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Working with First Order Logic models</span></h1><p class="paragraph"><span class="span">The function <span class="mathinline">\(m\)</span>, "model of".</span></p><p class="paragraph"><span class="span">For <span class="mathinline">\(\sigma \in \Sigma\)</span> such that <span class="mathinline">\(\sigma\)</span> has type <span class="mathinline">\(F_k\)</span>, <span class="mathinline">\(m(\sigma)\)</span> is a function <span class="mathinline">\(D \times \cdots_{k} \times D \rightarrow D\)</span>.</span></p><p class="paragraph"><span class="span">For <span class="mathinline">\(\sigma \in \Sigma\)</span> such that <span class="mathinline">\(\sigma\)</span> has type <span class="mathinline">\(P_k\)</span>, <span class="mathinline">\(m(\sigma)\)</span> is a subset of <span class="mathinline">\(D \times \cdots_{k} \times D\)</span>.</span></p><p class="paragraph"><span class="span"><span class="bold">Examples</span>.</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(m(\text{Alice}) = \{ \mapsto \text{Alice} \}\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(m(\text{BiologicalMother}) = \{ \mapsto \text{<Alice>}, \mapsto \text{<Bob>} \}\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(m(\text{Bird}) = \{ \text{<Alice>}, \text{<Bob>} \}\)</span></span></li><p class="paragraph"><span class="span"><span class="bold">Define</span>. Assume access to a global set of <span class="mathinline">\(X\)</span> variables. The set of <span class="bold">terms</span> of a <span class="mathinline">\(\Sigma\)</span> is <span class="mathinline">\(\mathcal{T}(\Sigma)\)</span>, which is defined as the smallest set of strings such that</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(X \subset \mathcal{T}(\Sigma)\)</span></span></li><li class="unorderedlistitem"><span class="span">if <span class="mathinline">\(t_1, \dots, t_k \in \mathcal{T}(\Sigma)\)</span> and <span class="mathinline">\(f \in F_k(\Sigma),\)</span> then <span class="mathinline">\(f(t_1, \dots, t_k) \in \mathcal{T}(\Sigma)\)</span>.</span></li><p class="paragraph"><span class="span"><span class="bold">Define</span>. The language <span class="mathinline">\(\mathcal{L}_{FOL}(\Sigma)\)</span> is the smallest set such that</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(True, False \in \mathcal{L}_{FOL}(\Sigma)\)</span></span></li><li class="unorderedlistitem"><span class="span">if <span class="mathinline">\(t_1, t_2 \in \mathcal{T}(\Sigma)\)</span>, then <span class="mathinline">\(t_1 = t_2 \in \mathcal{L}(\Sigma)\)</span></span></li><li class="unorderedlistitem"><span class="span">if <span class="mathinline">\(t_1, \dots, t_k \in \mathcal{T}(\Sigma)\)</span> and <span class="mathinline">\(p \in P_k(\Sigma)\)</span>, then <span class="mathinline">\(p(t_1, \dots, t_k) \in \mathcal{L}(\Sigma)\)</span>.</span></li><li class="unorderedlistitem"><span class="span">if <span class="mathinline">\(\alpha, \beta \in \mathcal{L}(\Sigma),\)</span> then <span class="mathinline">\((\alpha \land \beta)\)</span></span></li><li class="unorderedlistitem"><span class="span">if <span class="mathinline">\(\alpha \in \mathcal{L}(\Sigma)\)</span> and <span class="mathinline">\(x \in X,\)</span> then: <span class="mathinline">\(\forall x \alpha \in \mathcal{L}(\Sigma)\)</span> and <span class="mathinline">\(\exists x \alpha \in \mathcal{L}(\Sigma)\)</span></span></li><p class="paragraph"><span class="span"><span class="bold">Example</span>. Take the statement <span class="mathinline">\(\forall x, \text{Penguin}(x) \implies \text{Bird}(x)\)</span>. Then</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    I(\forall x, \text{P}(x) \implies \text{B}(x)) \\
+    &= \bigcap_{d \in D} I_{x \mapsto d} (P(x) \implies B(x)) \\
+    &= \bigcap_{d \in D} I_{x \mapsto d} (\lnot P(x) \lor B(x)) \\
+    &= \bigcap_{d \in D} ( I_{x \mapsto d}(\lnot P(x)) \cup I_{x \mapsto d}(B(x)) ) \\
+    &= \bigcap_{d \in D} ( \overline{I_{x \mapsto d}(\lnot P(x))} \cup I_{x \mapsto d}(B(x)) ) \\
+    &= \bigcap_{d \in D} \{ m \in M_{FOL}(\Sigma, D) \mid \bigcup \{ m \in M_{FOL}(\Sigma, D) \mid \text{<d>} \in m(B) \} \text{<d>} \not\in m(P) \}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="bold">Homework</span></span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \forall x, Q(x) &\equiv \lnot \exists x \lnot Q(x) \\
+    I(\forall x, Q(x)) &= \bigcap_{d \in D} I_{x \mapsto d} (Q(x)) \\
+    &= \dots \\
+    &= I(\lnot \exists x \lnot Q(x))
+\end{aligned}
+$$</p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

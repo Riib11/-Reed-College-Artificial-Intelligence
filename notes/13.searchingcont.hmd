@@ -1,0 +1,47 @@
+# Searching - Continued
+
+::style style/main.css
+
+## Optimizing Search
+
+To search without revisiting states:
+
+```python
+Search(M = (Q, S, D, q0, F, w)):
+    container = new Container()
+    container.put((q0, 0))
+    visited = {} # keep track of visited to
+                 # avoid revisiting
+    repeat:
+        if container.empty: return infinity
+        n = container.get()
+        if q(n) in F: return q(n)
+        Visit(n, container)
+
+Visit(n, container, M):
+    if not q(n) in visited:
+        for n' in Successors(M, n):
+            if not q(n') in visited:
+                container.put(n')
+
+Successors(M, (q, g)) :=
+    { < q', g + w(q, s, q') >
+    | s in S, (q, s, q') in D }
+```
+
+## Measuring Efficiency
+
+In AI, there's a little different conception of efficiency. It isn't satisfactory just to say, for example "linear in size of graph", because sometimes our graphs will have billions of nodes (or infinite).
+
+- *Branching Factor*: the maximum number of out-edges of a single node, among nodes in graph:
+$$
+    \text{max}_q \left| \{ q^\prime \mid (q, \sigma, q^\prime) \in \Delta, \sigma \in \Sigma \} \right|
+    % \text{max}_q \left| \right|
+$$
+- *Maximum Depth*: Maximum-length traversal of graph
+- *Solution Depth*: Maximum number of transitions from start to goal.
+
+
+In _Word Ladder_, we have 3, $\infty$, 3 respectively.
+
+In _N-Queens_, we have $n$, $n$, $n$ respectively.

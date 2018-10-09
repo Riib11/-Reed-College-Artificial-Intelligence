@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">State Spaces</span></h1><p class="paragraph"><span class="span">For <span class="mathinline">\(n\)</span>-Queens game, can make state graph acyclic by having each state be a board with at most <span class="mathinline">\(n\)</span> queens. Then, states are connected if you can get from the source to the target by placing a new queen on some square.</span></p><p class="paragraph"><span class="span">But there are different ways to do this. For example, could connect states only when placing the new queen does not allow it to be attacked.</span></p><img class="image" src="graphs/11.statespace1.png"><h3 class="h3"><span class="span">State Machine</span></h3><p class="paragraph"><span class="span">A state machine <span class="mathinline">\(M = (Q, \Sigma, \Delta, q_0, F, w)\)</span> where</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    Q &\text{ is the set of states} \\
+    
+    \Sigma &\text{ is the set of actions} \\
+    
+     \Delta \subseteq Q \times \Sigma \times Q &        \text{ is the set of permissible transitions} \\
+
+    q_0 &\text{ is the initial state} \\
+
+    F &\text{ is the set of final states} \\
+
+    w : \Delta \rightarrow \mathbb{R} &\text{ assigns a weight to each transition}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A <span class="bold">search path</span> is a sequence <span class="mathinline">\(\langle d_0 , \dots , d_k \rangle\)</span> of transitions <span class="mathinline">\(d_i \in \Delta\)</span> where <span class="mathinline">\(d_i = (q_i, \sigma_i, q_{i+1})\)</span> for <span class="mathinline">\(\sigma_i \in \Sigma\)</span>.</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A search path is a <span class="bold">solution</span> if <span class="mathinline">\(q_{k+1} \in F\)</span>.</span></p><h3 class="h3"><span class="span">Infinite States</span></h3><p class="paragraph"><span class="span">Generally, state machines are restricted to finite states (FSA). But in search, we would prefer just an SA, without the finiteness restriction</span></p><p class="paragraph"><span class="span"><span class="italic">Conjecture</span>. (Donald Knuth) Any positive integer can be obtained by starting with the number 4, and applying some equence of factorial, square root, and floor operations.</span></p><p class="paragraph"><span class="span">Turns out the state space for this is <span class="mathinline">\(\mathbb{R}_+\)</span>, so there are uncountably infinitely many states.</span></p></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

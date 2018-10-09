@@ -1,0 +1,8 @@
+graph {
+    Seattle -- Boise [label=8]
+    Seattle -- Portland [label=3]
+    Portland -- Eureka [label=13]
+    Portland -- Oakland [label=10]
+    Oakland -- Boise [label=10]
+    Eureka -- Oakland [label=3]
+}

@@ -1,0 +1,78 @@
+# First Order Logic
+
+::style style/main.css
+
+## House Puzzle
+
+Information:
+- Dane, Norwegian, Swede live in three houses
+- No houses are painted same color
+- Each house painted one color
+- Nobody lives in same house
+- The Dane lives directly to the right of hte red house
+- THe Norwegian lives in blue house
+
+_Question_: What color is the Swede's house?
+
+To represent "No houses are painted same color" this in propositional logic, write
+$$
+\begin{aligned}
+    \text{House1Blue } &\implies \lnot \text{House2Blue} \land \lnot \text{House3Blue} \\
+    \text{House1Red } &\implies \lnot \text{House2Red} \land \lnot \text{House3Red} \\
+    &\dots
+\end{aligned}
+$$
+
+and we need $m \cdot n$ statements to finish this, where $m$ is houses and $n$ is colors.
+
+What would make this easier? Introduction *object*s. For example, in "If *I* am to *your* right, then *you* are to *my* left" there are two objects: me and you.
+
+## First Order Logic
+
+Have *Syntax*, *Semantics*, and *Interpretation* that maps each instance of syntax into semantic space (power set of possible worlds). Maintain that
+$$
+    a \vDash b \iff I(a) \subseteq I(b)
+$$
+
+_Domain of Discourse_ $D$ is a set of objects. Objects are _distinct_ from their names that reference them. Let $F = \{ F_0, F_1, \dots \} $ where $F_i$ represents a function with $i$ arguments: $F_i : D \times \cdots_{i} \times D \rightarrow D$. Can say that a sort of _literal_ has type $F_0$, which is a constant mapping to $D$. And can have a _function_ of 1 name and has type $F_1$, takes one name and maps to $D$.
+
+Can be nice to have a null object in $D$ to map to when your predicate isn't really supposed to apply to a name. Like if you have object _Redness_, then `ColorOf(Redness)` shouldn't really apply, so we'll have `ColorOf(Redness) = null` (italic means its the object, non-italic means its the name).
+
+Also have $P_i \subseteq D \times \cdots_i \times D$ where $P_i$ is a predicate of $i$ names. 
+
+Consider this situation:
+$$
+\begin{aligned}
+    \Sigma_{PL} &= \{ \text{Bird, Penguin, Fly} \} \\
+    \Sigma_{FOL} &= \{
+        \text{Alice} : F_0, \text{Bob} : F_0, \text{Debbie} : F_0,
+        \text{Bird} : P_1, \text{Penguin} : P_1, \text{Fly} : P_1,
+        \text{ChildOf} : P_2
+    \}
+\end{aligned}
+$$
+
+And have objects $A,B,C,D,E$.
+
+We have
+$$
+\begin{aligned}
+    \text{Alice} &\mapsto A \\
+    \text{Bob} &\mapsto B \\
+    \text{Debbie} &\mapsto C \\
+    \text{Bird} &= \{ A,B,C,N \} \\
+    \text{Penguin} &= \{ A,B,N \} \\
+    \text{Fly} &= \{ C \} \\
+    \text{ChildOf} &= \{ (B,C), (N,A) \}
+\end{aligned}
+$$
+
+A model $m \in M_{FOL}(\Sigma, D)$ is a function such that
+$$
+\begin{aligned}
+    \forall f \in F_k ,
+        m(f) &: D \times \cdots \times D \rightarrow D \\
+    \forall p \in P_k,
+        m(p) &\subseteq D \times \cdots \times D
+\end{aligned}
+$$
