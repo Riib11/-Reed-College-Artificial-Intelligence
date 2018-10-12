@@ -40,6 +40,7 @@ from game import Actions
 import util
 import time
 import search
+import math
 import itertools as it
 
 class GoWestAgent(Agent):
@@ -263,27 +264,6 @@ def euclideanHeuristic(position, problem, info={}):
     xy2 = problem.goal
     return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
 
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
@@ -293,6 +273,11 @@ class CornersState:
     def __init__(self, pacmanGameState, cornersLeft):
         self.pacmanGameState = pacmanGameState
         self.cornersLeft = cornersLeft
+        self.getWalls = self.pacmanGameState.getWalls
+        self.getPacmanPosition = self.pacmanGameState.getPacmanPosition
+
+    def __str__(self):
+        return str(self.pacmanGameState.getPacmanPosition()) + ":" + str(self.cornersLeft)
 
 class CornersProblem(search.SearchProblem):
     """
@@ -323,14 +308,14 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
+        # "*** YOUR CODE HERE ***"
         return self.stateStart
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
+        # "*** YOUR CODE HERE ***"
         return len(state.cornersLeft) == 0
 
     def getSuccessors(self, state):
@@ -343,7 +328,7 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
-        "*** YOUR CODE HERE ***"
+        # "*** YOUR CODE HERE ***"
 
         gamestate = state.pacmanGameState
 
@@ -356,7 +341,6 @@ class CornersProblem(search.SearchProblem):
             positionNew = gamestateNew.getPacmanPosition()
             # print positionNew, cornersLeftNew
             if positionNew in cornersLeftNew:
-                if len(cornersLeftNew) < 4: print cornersLeftNew # $LOGGER
                 cornersLeftNew.remove(positionNew)
             stateNew = CornersState(gamestateNew, cornersLeftNew)
             successors.append((stateNew, action, 1))
@@ -376,7 +360,19 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+def pathDistance(path):
+    distance = 0
+    x1,y1 = path[0]
+    for (x2,y2) in path[1:]:
+        # distance += abs(x2-x1) + abs(y2-y1) # manhattan distance
+        distance += math.sqrt((x2-x1)**2 + (y2-y1)**2) # euclidean distance
+        x1, y1 = x2, y2
+    return distance
+
+heuristic_min = None
+
 def cornersHeuristic(state, problem):
+    global heuristic_min
     """
     A heuristic for the CornersProblem that you defined.
 
@@ -389,7 +385,12 @@ def cornersHeuristic(state, problem):
     shortest path from the state to a goal of the problem; i.e.  it should be
     admissible (as well as consistent).
     """
-    "*** YOUR CODE HERE ***"
+    # "*** YOUR CODE HERE ***"
+
+    """
+        Idea:   The length of the shortest path that goes
+                through all of the unvisited corners
+    """
 
     corners = problem.corners   # These are the corner coordinates
     walls = problem.walls       # These are the walls of the maze, as a Grid (game.py)
@@ -397,42 +398,22 @@ def cornersHeuristic(state, problem):
     # goal state
     if len(state.cornersLeft) == 0: return 0
 
-    # manhatten distance
-    def pathLength(path):
-        distance = 0
-        x1,y1 = path[0]
-        for (x2,y2) in path[1:]:
-            distance += abs(x2-x1) + abs(y2-y1)
-            x1, y1 = x2, y2
-        return distance
+    currentPosition = state.pacmanGameState.getPacmanPosition()
+    possiblePaths = [ ([currentPosition] + list(path)) for path in it.permutations(state.cornersLeft)]
+    possiblePathsLengths = [pathDistance(path) for path in possiblePaths]
+    shortestpathDistance = min(possiblePathsLengths)
+    shortestPathIndex = possiblePathsLengths.index(shortestpathDistance)
+    shortestPath = possiblePaths[shortestPathIndex]
 
-    possiblePaths = [path for path in it.permutations(state.cornersLeft)]
-    possiblePathsLengths = [pathLength(path) for path in possiblePaths]
+    # $LOGGER
+    if False:
+        if heuristic_min == None or shortestpathDistance < heuristic_min:
+            heuristic_min = shortestpathDistance        
+            print heuristic_min, " : ", shortestPath[0], " ~~ ", shortestPath[1:]
 
-    # print min(possiblePathsLengths) # $LOGGER
+    return shortestpathDistance
 
-    return min(possiblePathsLengths)
 
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
-################################################################
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -496,7 +477,10 @@ class AStarFoodSearchAgent(SearchAgent):
         self.searchFunction = lambda prob: search.aStarSearch(prob, foodHeuristic)
         self.searchType = FoodSearchProblem
 
+foodHeuristic_first= False
+
 def foodHeuristic(state, problem):
+    global heuristic_min, foodHeuristic_first
     """
     Your heuristic for the FoodSearchProblem goes here.
 
@@ -504,29 +488,127 @@ def foodHeuristic(state, problem):
     up with an admissible heuristic; almost all admissible heuristics will be
     consistent as well.
 
-    If using A* ever finds a solution that is worse uniform cost search finds,
+    If using A* ever finds a solution that is worse than uniform cost search finds,
     your heuristic is *not* consistent, and probably not admissible!  On the
     other hand, inadmissible or inconsistent heuristics may find optimal
     solutions, so be careful.
 
-    The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a Grid
-    (see game.py) of either True or False. You can call foodGrid.asList() to get
-    a list of food coordinates instead.
+    STATE = (pacmanPosition, foodGrid)
+        The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a Grid
+        (see game.py) of either True or False. You can call foodGrid.asList() to get
+        a list of food coordinates instead.
 
-    If you want access to info like walls, capsules, etc., you can query the
-    problem.  For example, problem.walls gives you a Grid of where the walls
-    are.
+        If you want access to info like walls, capsules, etc., you can query the
+        problem.  For example, problem.walls gives you a Grid of where the walls
+        are.
 
-    If you want to *store* information to be reused in other calls to the
-    heuristic, there is a dictionary called problem.heuristicInfo that you can
-    use. For example, if you only want to count the walls once and store that
-    value, try: problem.heuristicInfo['wallCount'] = problem.walls.count()
-    Subsequent calls to this heuristic can access
-    problem.heuristicInfo['wallCount']
+    foodGrid:
+        asList(): gives list of food coordinates
+
+    PROBLEM
+        If you want to *store* information to be reused in other calls to the
+        heuristic, there is a dictionary called problem.heuristicInfo that you can
+        use. For example, if you only want to count the walls once and store that
+        value, try: problem.heuristicInfo['wallCount'] = problem.walls.count()
+        Subsequent calls to this heuristic can access
+        problem.heuristicInfo['wallCount']
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    """
+        Idea:   The length of the shortest path that goes
+                through all of the food
+    """
+
+    # TODO
+    if foodHeuristic_first:
+        # somehow pre-calculate permutations?
+        permutations = []
+        problem.heuristicInfo["permutations"] = permutations
+        foodHeuristic_first = False
+
+    foodList = foodGrid.asList()
+
+    # goal state
+    if len(foodList) == 0: return 0
+
+    shortestpathDistance = MSTDistance([position] + foodList)
+
+    # shortestpathDistance = None
+    # for path in it.permutations(foodList):
+    #     # l = pathDistance(path)
+    #     l = MSTDistance(path)
+    #     if shortestpathDistance == None or l < shortestpathDistance:
+    #         shortestpathDistance = l
+
+    # $LOGGER
+    if False:
+        if heuristic_min == None or shortestpathDistance < heuristic_min:
+            heuristic_min = shortestpathDistance
+            print heuristic_min, len(foodList)
+
+    # possiblePaths = [ ([position] + list(path)) for path in it.permutations(foodList)]
+    # possiblePathsLengths = [pathDistance(path) for path in possiblePaths]
+    # shortestpathDistance = min(possiblePathsLengths)
+    # shortestPathIndex = possiblePathsLengths.index(shortestpathDistance)
+    # shortestPath = possiblePaths[shortestPathIndex]
+
+    # $LOGGER
+    if False:
+        if heuristic_min == None or shortestpathDistance < heuristic_min:
+            heuristic_min = shortestpathDistance
+            print heuristic_min, " : ", shortestPath[0], " ~~ ", shortestPath[1:]
+
+    return shortestpathDistance
+
+class KNode:
+    instance_count = 0
+    def __init__(self, position):
+        self.position = position
+        self.group = [KNode.instance_count]
+        KNode.instance_count += 1
+
+class KEdge:
+    def __init__(self, n1, n2):
+        self.n1 = n1
+        self.n2 = n2
+        self.weight = pathDistance([n1.position, n2.position])
+
+def MSTDistance(positions):
+    # kruskal sets
+
+    def getGroupName(node):
+        g = node.group
+        while isinstance(g, list):
+            g = g[0]
+        return g
+
+    def setGroupName(source, target):
+        g1 = getGroupName(source)
+        g2 = target.group
+        while isinstance(g2[0], list):
+            g2 = g2[0]
+        g2[0] = g1
+
+    # all nodes
+    nodes = [KNode(p) for p in positions]
+    # all possible edges
+    edges = [ KEdge(nodes[i], nodes[j])
+        for i in range(len(nodes))
+        for j in range(i+1, len(nodes)) ]
+    # sort by weight
+    edges = sorted(edges, key = lambda e:e.weight)
+
+    T = []
+
+    for edge in edges:
+        if getGroupName(edge.n1) != getGroupName(edge.n2):
+            T.append(edge) # lol, almost spells appendage
+            setGroupName(edge.n1, edge.n2)
+
+    return sum(e.weight for e in T)
+
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -546,6 +628,7 @@ class ClosestDotSearchAgent(SearchAgent):
         print 'Path found with cost %d.' % len(self.actions)
 
     def findPathToClosestDot(self, gameState):
+        global heuristic_min
         """
         Returns a path (a list of actions) to the closest dot, starting from
         gameState.
@@ -557,7 +640,29 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # find closest food in maze
+        targetDistances = [mazeDistance(startPosition, foodPosition, gameState)
+            for foodPosition in food.asList()]
+        targetDistance = min(targetDistances)
+        targetIndex = targetDistances.index(targetDistance)
+        target = food.asList()[targetIndex]
+
+        path = []
+        state = startPosition
+        while not problem.isGoalState(state):
+            # find best successor
+            succs = problem.getSuccessors(state)
+            succDistances = [mazeDistance(target, succ[0], gameState)
+                for succ in succs]
+            succMinDistance = min(succDistances)
+            succMinIndex = succDistances.index(succMinDistance)
+            succMin = succs[succMinIndex]
+            # take action
+            path.append(succMin[1])
+            state = succMin[0]
+
+        return path
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -590,10 +695,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
-        x,y = state
+        # "*** YOUR CODE HERE ***"
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return state in self.food.asList()
 
 def mazeDistance(point1, point2, gameState):
     """

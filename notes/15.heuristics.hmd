@@ -55,7 +55,7 @@ $$
 
 ]]] $\Box$
 
-_Proposition_. For heuristic function $H$, $H$ is consistent $\implies$ $H$ is consistent.
+_Proposition_. For heuristic function $H$, $H$ is permissable $\implies$ $H$ is consistent.
 
 _Proof_. (Proof by induction on length of optimal completion path).
 

@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Traveling Salesman Problem (TSP)</span></h1><p class="paragraph"><span class="span">Consider a graph</span></p><h2 class="h2"><span class="span">Introduction to the Traveling Salesman Problem</span></h2><img src="graphs/16.tsm01.png" class="image"><p class="paragraph"><span class="span"><span class="bold"></span>Definition<span class="bold"></span>. A <span class="bold">minimal spanning tree (MST)</span><span class="bold">is subset of edges of a graph that form a tree and have minimal combined edge weight.</span></span></p><p class="paragraph"><span class="span">We can write TSP more relaxed as "find the MST of maximal outdegree 2".</span></p><p class="paragraph"><span class="span">Can get a good heuristic by just requiring "find the MST"..</span></p><h2 class="h2"><span class="span">Definitions</span></h2><p class="paragraph"><span class="span"><span class="bold"></span>Definition<span class="bold"></span>. The <span class="bold">branching factor</span>, <span class="mathinline">\(b\)</span>, of a problem is</span></p><p class="mathmultiline">$$
+    \text{max}_q \left| \{ q^\prime \mid (q, \sigma, q^\prime) \in \Delta, \sigma \in \Sigma \} \right|
+$$</p><p class="paragraph"><span class="span"><span class="bold"></span>Definition<span class="bold"></span> The <span class="bold">maximum depth</span>, <span class="mathinline">\(m\)</span>, of a problem is the length of the longest of the search paths from the initial state to any state.</span></p><p class="paragraph"><span class="span"><span class="bold"></span>Definition<span class="bold"></span>. The <span class="bold">solution depth</span>, <span class="mathinline">\(d\)</span>, is the length of the shortest of the search paths from the initial state to a final state.</span></p><h2 class="h2"><span class="span">Runtime Analysis</span></h2><h3 class="h3"><span class="span">Breadth-First Search</span></h3><p class="paragraph"><span class="span">Say we have a tree. Let <span class="mathinline">\(N_k\)</span> be the number of nodes. Then we get</span></p><p class="mathmultiline">$$
+\begin{array}{c|l}
+m & |N_0| = 1 = b^0 \\ \downarrow 
+  & |N_1| = b |N_0| \\
+  & |N_2| = b |N_1| \\
+  & |N_3| = b |N_2| = bb |N_1| = bbb |N_0| = b^3 \\
+\end{array}
+$$</p><p class="paragraph"><span class="span">For the runtime of DFS, we are looking at</span></p><p class="mathmultiline">$$
+    b^0 + \cdots + b^m = \sum_{i=0}^m b^i = b^m + \sum_{i=0}^{m-1} b^i
+$$</p><p class="paragraph"><span class="span">If <span class="mathinline">\(b \geq 2\)</span>, this sum is <span class="mathinline">\(\leq 2 b^m = O(b^m)\)</span>. So, BFS is <span class="mathinline">\(O(b^d)\)</span>.</span></p><h3 class="h3"><span class="span">Depth-First Search</span></h3><p class="paragraph"><span class="span">Say we have a tree. Then you can see intuitively that DFS is <span class="mathinline">\(O(bm)\)</span>.</span></p><h2 class="h2"><span class="span">Space-Complexity Analysis</span></h2><h3 class="h3"><span class="span">Depth-First Search</span></h3><p class="paragraph"><span class="span">Can implement DFS either recursively or with a stack. But if you do it recursively, then you can run into recursive call depth limits :(</span></p><p class="paragraph"><span class="span">Can get <span class="mathinline">\(b\)</span> complexity with a recursive implementation :)</span></p><h3 class="h3"><span class="span">Breadth-First Search</span></h3><p class="paragraph"><span class="span">Has <span class="mathinline">\(b^{d+1}\)</span> space complexity, since gets to all the nodes at the final depth.</span></p><h2 class="h2"><span class="span">Resolutions</span></h2><p class="paragraph"><span class="span">We care more about space-complexity than runtime-complexity because it takes less than a human lifetime to fill a hard-drive, but we <span class="italic">can</span> wait for runtime-complex things.</span></p><p class="mathmultiline">$$
+\begin{array}{r|lll}
+\text{algorithm} & \text{finds optimal?} & \text{time} & \text{space} \\ \hline
+\text{BFS}
+    & \text{yes, with unit weights}
+    & O(b^d)
+    & O(b^{d+1}) \\
+\text{DFS}
+    & \text{nope}
+    & O(b^m)
+    & O(mb)
+\end{array}
+$$</p><p class="paragraph"><span class="span">So BFS looks much better than DFS. But if we know in advance that the solution is a a depth <span class="mathinline">\(x\)</span>, then we can construct Limited-DFS so that it stops at depth <span class="mathinline">\(x\)</span>. Then DFS is better than BFS! But if we don't know the target depth, then out of luck.</span></p><h3 class="h3"><span class="span">Iterated-DFS</span></h3><p class="paragraph"><span class="span">Or not perhaps? Well, say we Limited-DFS iteratively from <span class="mathinline">\(x\)</span> to 1 to <span class="mathinline">\(m\)</span>. Then it works for any <span class="mathinline">\(d\)</span>. But is this a good method?</span></p><p class="mathmultiline">$$
+    O(b) + \cdots + O(b^d)
+    \leq O(2 b^d)
+    = O(b^d)
+$$</p><p class="paragraph"><span class="span">This is really good! So we can add an entry to our list</span></p><p class="mathmultiline">$$
+\begin{array}{r|lll}
+\text{algorithm} & \text{finds optimal?} & \text{time} & \text{space} \\ \hline
+\text{BFS}
+    & \text{yes, with unit weights}
+    & O(b^d)
+    & O(b^{d+1}) \\
+\text{DFS}
+    & \text{nope}
+    & O(b^m)
+    & O(m b) \\
+\text{Iterated-DFS}
+    & \text{yes, with unit weights}
+    & O(b^d)
+    & O(d b)
+\end{array}
+$$</p></div></body>
+
+<head><link href="style/main.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

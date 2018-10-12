@@ -1,0 +1,8 @@
+graph {
+    graph [ratio=1]
+    A -- B [label=40]
+    A -- D [label=5]
+    D -- B [label=6]
+    D -- C [label=8]
+    B -- C [label=7]
+}

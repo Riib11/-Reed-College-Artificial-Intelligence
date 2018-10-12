@@ -190,6 +190,7 @@ class Grid:
         out = [[str(self.data[x][y])[0] for x in range(self.width)] for y in range(self.height)]
         out.reverse()
         return '\n'.join([''.join(x) for x in out])
+    __repr__ = __str__
 
     def __eq__(self, other):
         if other == None: return False

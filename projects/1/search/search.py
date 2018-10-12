@@ -113,7 +113,6 @@ def depthFirstSearch(problem):
         # check successors
         successors = problem.getSuccessors(state)
         for (nextState, direction, cost) in successors:
-            print "[search.py] nextState: ", type(nextState)
             if not str(nextState) in visited:
                 S.push(nextState)
                 prevs[str(nextState)] = (state, direction)
@@ -249,7 +248,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     visited         = [] # {Node}              # nodes that we've already visited
     horizon         = [] # {Node}              # nodes seen but not yet visited
     prevs           = {} # Node => (Node, Dir) # best previous node to get here
-    pathCosts     = {} # Node => Num         # total weight of best known path to node
+    pathCosts       = {} # Node => Num         # total weight of best known path to node
+
 
     #
     ## setters and getters
@@ -268,6 +268,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     def getPriority(node):
         return getPathCost(node) + heuristic(node, problem)
+
+    def contains(xs, x):
+        x_str = str(x)
+        return any([str(i) == x_str for i in xs])
 
     def getNextNode():
         minNode = horizon[0]
@@ -300,12 +304,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
         # check neighbors
         for (nextNode, nextDirection, nextCostNew) in problem.getSuccessors(currNode):
-            if nextNode in visited: continue
+            if contains(visited, nextNode): continue
 
             nextPathCostNew = currPathCost + nextCostNew
 
             # never seen this node before
-            if not nextNode in horizon:
+            if not contains(horizon, nextNode):
                 horizon.append(nextNode)
                 setPathCost(nextNode, nextPathCostNew)
                 setPrev(nextNode, (currNode, nextDirection))
