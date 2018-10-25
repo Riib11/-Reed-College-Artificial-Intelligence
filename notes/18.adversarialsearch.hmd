@@ -1,0 +1,36 @@
+# Adversarial Search
+
+## Multi-Player Games
+
+$$
+\newcommand{\p}{^\prime}
+\newcommand{\R}{\mathbb{R}}
+$$
+
+For example, Tic-Tac-Toe. The state space has states that contain the state of the board and who to go next. The transitions between states represent a play by the the player to go next as indicated by the source state of the transition.
+
+**Definition**. A *game* with players $P$ is
+- a state machine $M = (Q, \Sigma, \Delta, q_0, F)$ where each state $q \in Q$ has the form $(p,q\p) \in P \times Q\p$ for some auxilliary set of states.
+- A utility function $U : F \times P \rightarrow \R$.
+
+The utility function represents the payoffs to each player. For example, in Tic-Tac-Toe, when X wins, X has utility $+1$ and O has utility $-1$.
+
+## MiniMax
+
+Assume that your opponent will play perfectly (very optimistic). The method then is to write out every possible move sequence (game theory extensive form). This creates a tree, and assign to each node where P1 has a choice the utility of the *maximum* utility node among its children. Assign to each node where P2 has a choice the utility of the *minimum* utility node among its children. The leaves of the Tree are start the process, with their initially assigned utilities. Then the choices to make in actually playing is the path down the tree with the highest utility nodes.
+
+_Note_. The utilities are measured from P1's perspective.
+
+A problem is that for most interesting games, there are way too many states to compute this out efficiently. You have to cover every possible state. For that, you need to come up with a better heuristic for states than MiniMax. In Chess, for example, the pieces are assigned values.
+
+$$
+\begin{array}{c|c}
+\text{pieces} & \text{value} \\ \hline
+P & 1 \\
+B, K & 3 \\
+R & 5 \\
+Q & 9
+\end{array}
+$$
+
+These values were developed experimentally over time by Chess players, but they acutally turn out to be pretty accurate according to limited search attempts.

@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Adversarial Search</span></h1><h2 class="h2"><span class="span">Multi-Player Games</span></h2><p class="mathmultiline">$$
+\newcommand{\p}{^\prime}
+\newcommand{\R}{\mathbb{R}}
+$$</p><p class="paragraph"><span class="span">For example, Tic-Tac-Toe. The state space has states that contain the state of the board and who to go next. The transitions between states represent a play by the the player to go next as indicated by the source state of the transition.</span></p><p class="paragraph"><span class="span"><span class="bold"></span>Definition<span class="bold"></span>. A <span class="bold">game</span> with players <span class="mathinline">\(P\)</span> is</span></p><li class="unorderedlistitem"><span class="span">a state machine <span class="mathinline">\(M = (Q, \Sigma, \Delta, q_0, F)\)</span> where each state <span class="mathinline">\(q \in Q\)</span> has the form <span class="mathinline">\((p,q\p) \in P \times Q\p\)</span> for some auxilliary set of states.</span></li><li class="unorderedlistitem"><span class="span">A utility function <span class="mathinline">\(U : F \times P \rightarrow \R\)</span>.</span></li><p class="paragraph"><span class="span">The utility function represents the payoffs to each player. For example, in Tic-Tac-Toe, when X wins, X has utility <span class="mathinline">\(+1\)</span> and O has utility <span class="mathinline">\(-1\)</span>.</span></p><h2 class="h2"><span class="span">MiniMax</span></h2><p class="paragraph"><span class="span">Assume that your opponent will play perfectly (very optimistic). The method then is to write out every possible move sequence (game theory extensive form). This creates a tree, and assign to each node where P1 has a choice the utility of the <span class="bold">maximum</span> utility node among its children. Assign to each node where P2 has a choice the utility of the <span class="bold">minimum</span> utility node among its children. The leaves of the Tree are start the process, with their initially assigned utilities. Then the choices to make in actually playing is the path down the tree with the highest utility nodes.</span></p><p class="paragraph"><span class="span"><span class="italic">Note</span>. The utilities are measured from P1's perspective.</span></p><p class="paragraph"><span class="span">A problem is that for most interesting games, there are way too many states to compute this out efficiently. You have to cover every possible state. For that, you need to come up with a better heuristic for states than MiniMax. In Chess, for example, the pieces are assigned values.</span></p><p class="mathmultiline">$$
+\begin{array}{c|c}
+\text{pieces} & \text{value} \\ \hline
+P & 1 \\
+B, K & 3 \\
+R & 5 \\
+Q & 9
+\end{array}
+$$</p><p class="paragraph"><span class="span">These values were developed experimentally over time by Chess players, but they acutally turn out to be pretty accurate according to limited search attempts.</span></p></div></body>
+
+<head>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

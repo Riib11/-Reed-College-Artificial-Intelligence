@@ -1,0 +1,53 @@
+# Variants of MiniMax
+
+## Loop States
+
+_Definition_. A *loop state* is a state in the expansion of a game tree that is the same as a state the appears early in the game tree.
+
+If you have possible _loop states_, then you can modify MiniMax to ignore loop states, like so:
+
+```
+MiniMax(M, q, p0, Eval, Cutoff):
+    if Cutoff(q): return Eval(q)
+    maxEval := -∞ if p(q) = p0 else ∞
+    for q' in { q' | < q, σ, q' > in Δ }:
+        successorEval := MiniMax(M, q', p0, Eval, Cutoff)
+        if p(q) = p0:
+            maxEval := max(maxEval, successorEval)
+        else:
+            maxEval := min(maxEval, successorEval)
+    return maxEval
+```
+
+## Greedy Friends
+
+The game works like this
+
+- 1. P1 wants some money. P2 and P2 each have their own stash of coins.
+- 2. P1 asks P2 and P3 seperately for a coin
+- 3. When asked for a coin P2 and P3 each offer their least-valued coin.
+- 4. P1 chooses the single highest-valued coin offered to them.
+
+The trick is this: If P1 looks at P2's coins, then P1 only need to look at coins from P3 until they find a coin lower than any of P2's coins, at which point P1 will know exactly how the game will turn out.
+
+This is because if P1 knows they will get $x$ from P2, and they see a $y \leq x$ from P3, then they know that P3 will offer something $\leq y$, so they know they will choose $x$.
+
+This is called *alpha-beta pruning*.
+
+```
+AlphaBeta(M, q, p0, Eval, Cutoff, a, b):
+    if Cutoff(q): return Eval(q)
+    maxEval := -∞ if p(q) = p0 else ∞
+    for q' in { q' | < q, σ, q' > in Δ }:
+        if a >= b: return maxEval // prune
+        successorEval := AlphaBeta(M, q', p0, Eval, Cutoff, a, b)
+        if p(q) = p0:
+            maxEval := max(maxEval, successorEval)
+            a       := max(a, maxEval)
+        else:
+            maxEval := min(maxEval, successorEval)
+            b       := min(a, maxEval)
+    return maxEval
+```
+
+For a binary game tree, alha-beta pruning can reduce the number of nodes searched from $b^d$ to $\sqrt{b}^d$, so effectively square rooting the branching factor. By choosing which to choose randomly, can mediate the difference between the worst and best case, so can get $b^{3d/4}$.
