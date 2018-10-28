@@ -1,0 +1,39 @@
+# Probabilitic Games
+
+::style style/main.css
+
+## Black Jack
+
+The variant that we will work with is where you don't get to see any of the dealer's cards, and aces always count as 1s.
+
+### Probabilities:
+
+Dealer:
+$$
+\begin{array}{r|l}
+    \text{Hand} & Probability \\ \hline
+    21 & 12\% \\
+    20 & 18\% \\
+    19 & 13\% \\
+    18 & 14\% \\
+    17 & 15\% \\
+    \text{Bust} & 28\% \\
+\end{array}
+$$
+
+Player:
+$$
+\begin{array}{r|ccc|l}
+    \text{Hand} & \text{Win} & \text{Draw} &
+    \text{Loss} & \text{Expected Payout} \\ \hline
+    21 & 88\% & 12\% & 0\% & 0.88 \\
+    20 & 7\% & 18\% & 12\% & 0.58 \\
+    19 & 57\% & 13\% & 3\% & 0.27 \\
+    18 & 43\% & 14\% & 43\% & 0.00 \\
+    17 & 28\% & 15\% & 57\% & -0.29 \\
+    < 17 & 28\% & 0\% & 72\% & -0.44 \\
+    \text{Bust} & 0\% & 0\% & 100\% & -1
+\end{array}
+$$
+
+Represent the minimax tree as having two players: you and fate. Fate chooses the cards. But in the minimax algorithm, rather than using 'min' to choose for Fate, instead just calculate expected value of children. Use circles rather than upside-down triangles to represent 'fate' nodes that evaluate using expected value of children.
