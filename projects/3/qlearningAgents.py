@@ -20,6 +20,9 @@ import random,util,math
 
 GREEDY = False
 
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 class QLearningAgent(ReinforcementAgent):
     """
       Q-Learning Agent
@@ -45,7 +48,7 @@ class QLearningAgent(ReinforcementAgent):
         ReinforcementAgent.__init__(self, **args)
 
         # "*** YOUR CODE HERE ***"
-        self.values = util.Counter()
+        self.qvalues = util.Counter()
 
     def getQValue(self, state, action):
         """
@@ -54,7 +57,7 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         # "*** YOUR CODE HERE ***"
-        return float(self.values[(state, action)])
+        return float(self.qvalues[(state, action)])
 
 
     def computeValueFromQValues(self, state):
@@ -67,7 +70,7 @@ class QLearningAgent(ReinforcementAgent):
         # "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
         if len(actions) == 0: return 0.0
-        return float(max([self.getQValue(state, action) for action in actions]))
+        return float(max([ self.getQValue(state, action) for action in actions ]))
 
 
     def computeActionFromQValues(self, state):
@@ -79,10 +82,10 @@ class QLearningAgent(ReinforcementAgent):
         # "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
         if len(actions) == 0: return None
-        values = [self.getQValue(state, action) for action in actions]
+        values = [ self.getQValue(state, action) for action in actions ]
         value = self.computeValueFromQValues(state)
-        actions_possible = [action for action in actions
-            if self.getQValue(state, action) == value]
+        actions_possible = [ action for action in actions
+            if self.getQValue(state, action) == value ]
         action = random.choice(actions_possible)
         return action
 
@@ -110,6 +113,7 @@ class QLearningAgent(ReinforcementAgent):
             else:
                 return self.computeActionFromQValues(state)
         else:
+            # take best action
             return self.computeActionFromQValues(state)
 
     def update(self, state, action, nextState, reward):
@@ -122,11 +126,11 @@ class QLearningAgent(ReinforcementAgent):
           it will be called on your behalf
         """
         # "*** YOUR CODE HERE ***"
-        nextAction   = self.getAction(nextState)
-        nextValue    = float(self.values[(nextState, nextAction)])
-        currentValue = float(self.values[(state, action)])
+        nextAction = self.getAction(nextState)
+        nextValue = self.getQValue(nextState, nextAction)
+        currentValue = self.getQValue(state, action)
 
-        self.values[(state, action)] += (
+        self.qvalues[(state, action)] += (
             self.alpha
             * ( float(reward)
                 + (float(self.discount) * nextValue)
@@ -139,19 +143,24 @@ class QLearningAgent(ReinforcementAgent):
     def getValue(self, state):
         return self.computeValueFromQValues(state)
 
-
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 class PacmanQAgent(QLearningAgent):
     "Exactly the same as QLearningAgent, but with different default parameters"
 
-    def __init__(self, epsilon=0.05,gamma=0.8,alpha=0.2, numTraining=0, **args):
+    def __init__(self,
+        epsilon=0.05, gamma=0.8, alpha=0.2,
+        numTraining=0, **args
+    ):
         """
         These default parameters can be changed from the pacman.py command line.
         For example, to change the exploration rate, try:
             python pacman.py -p PacmanQLearningAgent -a epsilon=0.1
 
-        alpha    - learning rate
-        epsilon  - exploration rate
-        gamma    - discount factor
+        alpha - learning rate
+        epsilon - exploration rate
+        gamma - discount factor
         numTraining - number of training episodes, i.e. no learning after these many episodes
         """
         args['epsilon'] = epsilon
@@ -171,6 +180,8 @@ class PacmanQAgent(QLearningAgent):
         self.doAction(state,action)
         return action
 
+
+dot_product = lambda v1, v2, indecies: sum([ v1[i] * v2[i] for i in indecies ])
 
 class ApproximateQAgent(PacmanQAgent):
     """
@@ -194,37 +205,35 @@ class ApproximateQAgent(PacmanQAgent):
           where * is the dotProduct operator
         """
         # "*** YOUR CODE HERE ***"
-        # (features) and (weights) vectors
+        # features: vector<float>
         features = self.featExtractor.getFeatures(state, action)
+        # weights: vector<float>
         weights = self.getWeights()
-        keys = weights.keys()
-        # dot product (features, weights)
-        qvalue = sum([ weights[key] * features[key] for key in keys ])
-        # update qvalue
-        self.values[(state, action)] = qvalue
-
-        return qvalue
+        # qvalue = features . weights
+        return  dot_product(features, weights, features.keys())
 
     def update(self, state, action, nextState, reward):
         """
            Should update your weights based on transition
         """
         # "*** YOUR CODE HERE ***"
-        # relevant factors
-        nextAction = self.getAction(nextState)
-        features = self.featExtractor.getFeatures(state, action)
-        # update all w_i with f_i(s,a)
-        for key, val in features.items():
-            # relevant factors
-            nextValue = float(self.getValue(nextState))
-            currentValue = float(self.getValue(state))
-            # update w_i <- w_i + alpha * difference * f_i(s, a)
-            self.getWeights()[key] += (
-                self.alpha
-                * ( float(reward)
-                    + (float(self.discount) * nextValue)
-                    - currentValue)
-                * val )
+        # factors
+        weights = self.getWeights() # : Vector
+        features = self.featExtractor.getFeatures(state, action) # : Vector
+        currentValue = self.getQValue(state, action) # : Float
+        # nextValue : Float
+        nextValue = self.computeValueFromQValues(nextState)
+
+        # update each component of weight
+        for i in features.keys():
+            weights[i] = (
+                weights[i]
+                + ( self.alpha
+                    * ( float(reward)
+                        + (float(self.discount) * nextValue)
+                        - currentValue)
+                    * features[i]))
+
 
     def final(self, state):
         "Called at the end of each game."
@@ -235,4 +244,3 @@ class ApproximateQAgent(PacmanQAgent):
         if self.episodesSoFar == self.numTraining:
             # you might want to print your weights here for debugging
             "*** YOUR CODE HERE ***"
-            pass
