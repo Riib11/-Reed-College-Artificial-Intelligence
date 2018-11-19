@@ -1,0 +1,23 @@
+# The Monty Hall problem
+
+::style style/main.css
+
+## The Problem Setup
+
+Setup:
+- 3 doors
+- 2 doors have bad prizes
+- 1 door has a really good prize
+
+Play:
+- player chooses a door
+- host opens one of the remaining doors that has a bad prize, revealing that to the player
+- then the player can either stay or switch to the other remaining door
+
+People used to strongly and popularly disagree about whether to switch or stay. For example, a woman that wrote for parade said that its better to switch, but a bunch of PhD's said she was wrong.
+
+## Solution
+
+Turns out she's right.
+
+The probabilities are complicated to work out and use conditional dependence to show you're better off always switching.

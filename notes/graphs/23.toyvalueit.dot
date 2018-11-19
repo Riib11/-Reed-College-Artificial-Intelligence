@@ -1,0 +1,7 @@
+digraph {
+    graph [ratio=2]
+    A -> A [label="Stay (1/2)"]
+    A -> B [label="Stay (1/2), Go (1)"]
+    B -> A [label="Go (1/5)"]
+    B -> B [label="Stay (1), Go (4/5)"]
+}

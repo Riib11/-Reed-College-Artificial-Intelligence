@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Variants of MiniMax</span></h1><h2 class="h2"><span class="span">Loop States</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A <span class="bold">loop state</span> is a state in the expansion of a game tree that is the same as a state the appears early in the game tree.</span></p><p class="paragraph"><span class="span">If you have possible <span class="italic">loop states</span>, then you can modify MiniMax to ignore loop states, like so:</span></p><pre><code><pre class="codemultiline ">MiniMax(M, q, p0, Eval, Cutoff):
+    if Cutoff(q): return Eval(q)
+    maxEval := -∞ if p(q) = p0 else ∞
+    for q' in { q' | < q, σ, q' > in Δ }:
+        successorEval := MiniMax(M, q', p0, Eval, Cutoff)
+        if p(q) = p0:
+            maxEval := max(maxEval, successorEval)
+        else:
+            maxEval := min(maxEval, successorEval)
+    return maxEval</pre></code></pre><h2 class="h2"><span class="span">Greedy Friends</span></h2><p class="paragraph"><span class="span">The game works like this</span></p><li class="unorderedlistitem"><span class="span">1. P1 wants some money. P2 and P2 each have their own stash of coins.</span></li><li class="unorderedlistitem"><span class="span">2. P1 asks P2 and P3 seperately for a coin</span></li><li class="unorderedlistitem"><span class="span">3. When asked for a coin P2 and P3 each offer their least-valued coin.</span></li><li class="unorderedlistitem"><span class="span">4. P1 chooses the single highest-valued coin offered to them.</span></li><p class="paragraph"><span class="span">The trick is this: If P1 looks at P2's coins, then P1 only need to look at coins from P3 until they find a coin lower than any of P2's coins, at which point P1 will know exactly how the game will turn out.</span></p><p class="paragraph"><span class="span">This is because if P1 knows they will get <span class="mathinline">\(x\)</span> from P2, and they see a <span class="mathinline">\(y \leq x\)</span> from P3, then they know that P3 will offer something <span class="mathinline">\(\leq y\)</span>, so they know they will choose <span class="mathinline">\(x\)</span>.</span></p><p class="paragraph"><span class="span">This is called <span class="bold">alpha-beta pruning</span>.</span></p><pre><code><pre class="codemultiline ">AlphaBeta(M, q, p0, Eval, Cutoff, a, b):
+    if Cutoff(q): return Eval(q)
+    maxEval := -∞ if p(q) = p0 else ∞
+    for q' in { q' | < q, σ, q' > in Δ }:
+        if a >= b: return maxEval // prune
+        successorEval := AlphaBeta(M, q', p0, Eval, Cutoff, a, b)
+        if p(q) = p0:
+            maxEval := max(maxEval, successorEval)
+            a       := max(a, maxEval)
+        else:
+            maxEval := min(maxEval, successorEval)
+            b       := min(a, maxEval)
+    return maxEval</pre></code></pre><p class="paragraph"><span class="span">For a binary game tree, alha-beta pruning can reduce the number of nodes searched from <span class="mathinline">\(b^d\)</span> to <span class="mathinline">\(\sqrt{b}^d\)</span>, so effectively square rooting the branching factor. By choosing which to choose randomly, can mediate the difference between the worst and best case, so can get <span class="mathinline">\(b^{3d/4}\)</span>.</span></p></div></body>
+
+<head><link type="text/css" href="style/main.css" rel="stylesheet">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

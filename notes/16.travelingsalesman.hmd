@@ -2,13 +2,13 @@
 
 ::style style/main.css
 
-Consider a graph
-
 ## Introduction to the Traveling Salesman Problem
+
+Consider a graph
 
 % graphs/16.tsm01.png
 
-**Definition**. A *minimal spanning tree (MST)** is subset of edges of a graph that form a tree and have minimal combined edge weight.
+**Definition**. A *minimal spanning tree (MST)* is subset of edges of a graph that form a tree and have minimal combined edge weight.
 
 We can write TSP more relaxed as "find the MST of maximal outdegree 2".
 

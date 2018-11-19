@@ -1,0 +1,80 @@
+# Q Learning
+
+::style style/main.css
+
+$$
+\newcommand{\t}[1]{\text{#1}}
+\newcommand{\p}{^\prime}
+$$
+
+## Approach: Simple
+
+We can measure utility of state $\sigma$ in a policy by just running a bunch of trials where you starts at $\sigma$ and then averaging the resulting utilities.
+
+_Problem_. This ignores the entire structure of the MDP of the game.
+
+## Approach: Adaptive Dynamic Programming
+
+_Definition_. (*Adaptive Dynamic Programming*) Run trials and also keep track of probabilities of transitions. Then can use Bellman equation to caluculate probabilities.
+
+_Problem_. How much data is needed, and how accurate do the calculations end up being? Seems like it will need a lot of data, and this can be impractical, especially when the statespace is big.
+
+_Problem_. Is *offline*. If a new datum is found, then you need to recompute the entire thing to incorporate it into the learned model. We should want it to be *online*, where new data can be incorporated quickly.
+
+## Approach: Temporal Difference Learning
+
+Online mean, where $x_n$ is the $n^{th}$ number and $m_n$ is the online mean after $n$ numbers.
+$$
+\begin{array}{c|c|l}
+    n & x_n & m_n \\\hline
+    0 &     & 0   \\
+    1 & 15  & m_0 + \frac{1}{2} (x_1 - m_0) = 15 \\
+    2 & 3   & m_1 + \frac{1}{2} (x_2 - m_1) = 9 \\
+    3 & 4   & m_2 + \frac{1}{2} (x_3 - m_2) = 10 \\
+    \vdots &&
+\end{array}
+$$
+
+This utilizes $m_0 = 0, m_n = (x_n - m_{n-1})$. Only have to store $m_{n-1}, n$.
+
+Can incorporate this into Adaptive Dynamic Programming by keeping track of each utility in the same way as the online mean calculation. So to calculate $R(q) + \gamma U^\pi(q\p)$,
+
+$$
+\begin{array}{l}
+    U^\pi := 0 \\
+    \t{for } n = 1 \t{ to } N:
+    U^\pi(q) = U^\pi(q) + \frac{1}{n} + \gamma U^\pi(q\p) - U^\pi(q)
+\end{array}
+$$
+
+Then, if we do all these calculations simulataneously, then do Temporal Difference Learning
+
+_Definition_. *Temporal Difference Learning*:
+$$
+\begin{array}{l}
+    U^\pi(q) := 0 &\\
+    n_q := 1 &\\
+    \t{repeat}: &\\
+    &   \t{observe transition } q \xrightarrow{\pi(q)} q\p \\
+    &   U^\pi(q) += \frac{1}{n_q}((R_0(q) + \gamma U^\pi(q\p)) - U^\pi(q))
+\end{array}
+$$
+
+## Q Learning
+
+Want to average $R_0(q) + \gamma \max_\sigma U(q\p, \sigma)$.
+
+$$
+\begin{array}{ll}
+    U(q, \sigma) := 0 & \forall (q, \sigma) \in Q \times \Sigma \\
+    n_q    := 1 & \forall q \in Q &\\
+    \t{repeat}: & \\
+    (1) &   \t{choose } \sigma \\
+    &   \t{observe transition } q \xrightarrow{\sigma} q\p \\
+    &   U(q, \sigma) \t{ += } \frac{1}{n_q}((R_0(q) + \gamma U(q\p, \sigma\p)) - U(q, \sigma))
+\end{array}
+$$
+
+But how do we a $\sigma$ in $(1)$? Use this algorithm:
+- If have probability $p$: choose random action $\sigma$. (*Exploration*).
+- If not, choose $\max_\sigma U(q, \sigma)$. (*Exploitation*)

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Value Iteration <i>Continued</i></span></h1><p class="mathmultiline">$$
+\newcommand{\p}{^\prime}
+\newcommand{\t}[1]{\text{#1}}
+$$</p><h2 class="h2"><span class="span">Homework Review</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. <span class="bold">Bellman Equation</span></span></p><p class="mathmultiline">$$
+    U(q) = R_0(q) + \gamma \max_{\sigma \in \Sigma}
+    \sum_{q\p \in Q} U(q\p \mid q, \sigma)
+$$</p><h3 class="h3"><span class="span">Setup:</span></h3><p class="mathmultiline">$$
+\begin{array}{|c|c|c|} \hline
+r  & -1 & +10 \\\hline
+-1 & -1 & -1 \\\hline
+-1 & -1 & -1 \\\hline
+\end{array}
+$$</p><h3 class="h3"><span class="span">Calculation:</span></h3><p class="mathmultiline">$$
+\begin{array}
+  & A & B & C & D & E & F & G & H & I &  & A left              & A right                        & A up   & A down \\ \hline
+}
+1 & 0 &   &   &   &   &   &   &   &   &  & 0.9 U(A) + 0.1 U(P) & 0.8 U(B) + 0.1 U(D) + 0.1 U(A) & \dots  & \dots  \\ \hline
+2 &   &   &   &   &   &   &   &   &   &  & \vdots              & \vdots                         & \vdots & \vdots \\ \hline
+3 &   &   &   &   &   &   &   &   &   &  & 12.2                & 10.8                           & 11     & 9      \\ \hline
+\end{array}
+$$</p><h3 class="h3"><span class="span">Convergence:</span></h3><p class="paragraph"><span class="span">if <span class="mathinline">\(\forall 0 \leq k < 1\)</span> we have</span></p><p class="mathmultiline">$$
+    \t{dist}\left(
+        \binom{U^A_{i+1}{U^B_{i+1}}} , \binom{U^A}{U^B}
+    \right)
+    \leq
+    k \cdot \t{dist}\left(
+        \binom{U^A_{i}{U^B_{i}}} , \binom{U^A}{U^B}
+    \right),
+$$</p><p class="paragraph"><span class="span">then</span></p><p class="mathmultiline">$$
+    \lim_{i \rightarrow \infty} \t{dist}\left(
+        \binom{U^A_{i}{U^B_{i}}} , \binom{U^A}{U^B}
+    \right)
+    = 0
+$$</p><p class="paragraph"><span class="span">We can get this by showing that</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \t{dist}\left(
+        \binom{U^A_{i}{U^B_{i}}} , \binom{U^A}{U^B}
+    \right)
+    &=
+    \max_{q \in \{A, B\}} \left|
+        U^q_{i-1} - U^q
+    \right|
+    \\
+    \max_{q \in \{A, B\}} \left|
+        U^q_{i+1} - U^q
+    \right|
+    &=
+    \left[
+        R_0(q) +
+        \gamma \max_{\sigma \in \Sigma}
+            \sum_{q\p \in Q}
+            U_i^{q\p}(q\p \mid q, \sigma)
+    \right]
+    -
+    \left[
+        R_0(q) +
+        \gamma \max_{\sigma \in \Sigma}
+            \sum_{q\p \in Q}
+            U^{q\p}(q\p \mid q, \sigma)
+    \right]
+    \\
+    &=
+    \left|
+    \gamma \max_{\sigma} \sum_{q\p} U^{q\p}_i P(q\p \mid q, \sigma) - \max_\sigma \sum{q\p} U^{q\p} P(q\p \mid q, \sigma)
+    \right|
+    \\
+    &\leq
+    \gamma \max_\sigma \left|
+        \sum_{q\p} U^{q\p}_i P(q\p \mid q, \sigma) - \sum_{q\p} U^{q\p} P(q\p \mid q, \sigma)
+    \right|
+    \\
+    &=
+    \gamma \max_\sigma \left|
+        \sum_{q\p} (U^{q\p}_i - U^{q\p}) P(q\p \mid q, \sigma)
+    \right|
+    \\
+    &\leq
+    \gamma \max_\sigma \sum_{q\p}
+        |U^{q\p}_i - U^{q\p}|
+        P(q\p \mid q, \sigma)
+    \\
+    &\leq
+    \gamma \max_\sigma \max_{q\p}
+        | U^{q\p}_i - U^{q\p} |
+    \\
+    &=
+    \gamma \max_{q\p}
+        | U^{q\p}_i - U^{q\p} |
+    \\
+    &\leq
+    \t{dist}\left(
+        \binom{U^A_{i}{U^B_{i}}} , \binom{U^A}{U^B}
+    \right)
+\end{aligned}
+$$</p></div></body>
+
+<head><link rel="stylesheet" href="style/main.css" type="text/css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

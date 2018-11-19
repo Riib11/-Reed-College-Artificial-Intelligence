@@ -1,0 +1,46 @@
+# Markov Desicions
+
+::style style/main.css
+
+$$
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\p}{^\prime}
+$$
+
+_Definition_. A *MDP* is a triple $(M,R,w)$ where
+- $M = (Q, \Sigma, \Delta, q_0, F)$ is a state machine
+- $R : Q \times \N \rightarrow \R$ is a _reward function_.
+- $w : \Delta \rightarrow \R$ such that $\forall q \in Q : \forall \sigma \in \Sigma : \sum_{(q, \sigma, q\p)} w((q, \sigma, q\p)) = 1$
+
+Review of shorthand:
+
+- $\forall t \geq 0 : R_t(q) := R(q,t)$
+- $\forall \langle q, \sigma, q\p \rangle \in \Delta : P(q\p \mid q, \sigma) := w(\langle q, \sigma, q\p \rangle)$
+- $q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots := \langle (q,\sigma_0,q_1), (q_1, \sigma_1, q_2), \dots \rangle$
+- $\text{reward}(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = \sum_{i} R_i(q_i)$
+- the above goes to $P(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = P(q_1 \mid q, \sigma_0) \cdot P(q_2 \mid q_1, \sigma_1) \cdots P(q_n \mid q_{n-1}, \sigma_{n-1})$.
+
+## Blackjack
+
+_Definition_. A *policy* is a mapping from states to actions.
+
+For policy $\pi$
+$$
+\begin{aligned}
+    U(A20)
+    &= \text{reward}(A20 \xrightarrow{H} S21)
+        P(A20 \xrightarrow{H} S21) +
+        \text{reward}(A20 \xrightarrow{H} \text{Bust})
+        P(A20 \xrightarrow{H} \text{Bust}) \\
+    &= [R_0(A20) + R_1(S21)] P(A20 \xrightarrow{H} S21) +
+        [R_0(A20) + R_1(\text{Bust})] P(A20 \xrightarrow{H} \text{Bust}) \\
+    &= R_0(A20)[P(A20 \xrightarrow{H} S21) + P(A20 \xrightarrow{H} \text{Bust})] +
+        R(S21) P(A20 \xrightarrow{H} S21) +
+        R(\text{Bust}) P(A20 \xrightarrow{H} \text{Bust}) \\
+    &= R_0(A20) + \gamma R_0(S21) P(A20 \xrightarrow{H} S21) +
+        \gamma R_0 (\text{Bust}) P(A20 \xrightarrow{H} \text{Bust})\\
+    &= \dots \\
+    &= R_0(A20) + \gamma \sum_{q\p \in Q} U^\pi(q\p) P(q\p \mid A20, \text{Hit})
+\end{aligned}
+$$

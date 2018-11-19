@@ -1,0 +1,17 @@
+# Greedy Epsilon
+
+## Learning Rate
+
+QLearning without counts, just using constant a (alpha)
+```
+forall (q,s) in Q x S: U(q, s) := 0
+repeat:
+    with prob e:
+        choose random s
+    otherwise:
+        choose argmax(s, U(q,s))
+    observe transition q -s-> q'
+    U(q, s) += a ( R0(q, s, q') + g max(s', U(q', s') - U(q, s)))
+```
+
+## Black Jack

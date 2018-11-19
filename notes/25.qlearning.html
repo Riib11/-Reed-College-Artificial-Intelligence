@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Q Learning</span></h1><p class="mathmultiline">$$
+\newcommand{\t}[1]{\text{#1}}
+\newcommand{\p}{^\prime}
+$$</p><h2 class="h2"><span class="span">Approach: Simple</span></h2><p class="paragraph"><span class="span">We can measure utility of state <span class="mathinline">\(\sigma\)</span> in a policy by just running a bunch of trials where you starts at <span class="mathinline">\(\sigma\)</span> and then averaging the resulting utilities.</span></p><p class="paragraph"><span class="span"><span class="italic">Problem</span>. This ignores the entire structure of the MDP of the game.</span></p><h2 class="h2"><span class="span">Approach: Adaptive Dynamic Programming</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. (<span class="bold">Adaptive Dynamic Programming</span>) Run trials and also keep track of probabilities of transitions. Then can use Bellman equation to caluculate probabilities.</span></p><p class="paragraph"><span class="span"><span class="italic">Problem</span>. How much data is needed, and how accurate do the calculations end up being? Seems like it will need a lot of data, and this can be impractical, especially when the statespace is big.</span></p><p class="paragraph"><span class="span"><span class="italic">Problem</span>. Is <span class="bold">offline</span>. If a new datum is found, then you need to recompute the entire thing to incorporate it into the learned model. We should want it to be <span class="bold">online</span>, where new data can be incorporated quickly.</span></p><h2 class="h2"><span class="span">Approach: Temporal Difference Learning</span></h2><p class="paragraph"><span class="span">Online mean, where <span class="mathinline">\(x_n\)</span> is the <span class="mathinline">\(n^{th}\)</span> number and <span class="mathinline">\(m_n\)</span> is the online mean after <span class="mathinline">\(n\)</span> numbers.</span></p><p class="mathmultiline">$$
+\begin{array}{c|c|l}
+    n & x_n & m_n \\\hline
+    0 &     & 0   \\
+    1 & 15  & m_0 + \frac{1}{2} (x_1 - m_0) = 15 \\
+    2 & 3   & m_1 + \frac{1}{2} (x_2 - m_1) = 9 \\
+    3 & 4   & m_2 + \frac{1}{2} (x_3 - m_2) = 10 \\
+    \vdots &&
+\end{array}
+$$</p><p class="paragraph"><span class="span">This utilizes <span class="mathinline">\(m_0 = 0, m_n = (x_n - m_{n-1})\)</span>. Only have to store <span class="mathinline">\(m_{n-1}, n\)</span>.</span></p><p class="paragraph"><span class="span">Can incorporate this into Adaptive Dynamic Programming by keeping track of each utility in the same way as the online mean calculation. So to calculate <span class="mathinline">\(R(q) + \gamma U^\pi(q\p)\)</span>,</span></p><p class="mathmultiline">$$
+\begin{array}{l}
+    U^\pi := 0 \\
+    \t{for } n = 1 \t{ to } N:
+    U^\pi(q) = U^\pi(q) + \frac{1}{n} + \gamma U^\pi(q\p) - U^\pi(q)
+\end{array}
+$$</p><p class="paragraph"><span class="span">Then, if we do all these calculations simulataneously, then do Temporal Difference Learning</span></p><p class="paragraph"><span class="span"><span class="italic">Definition</span>. <span class="bold">Temporal Difference Learning</span>:</span></p><p class="mathmultiline">$$
+\begin{array}{l}
+    U^\pi(q) := 0 &\\
+    n_q := 1 &\\
+    \t{repeat}: &\\
+    &   \t{observe transition } q \xrightarrow{\pi(q)} q\p \\
+    &   U^\pi(q) += \frac{1}{n_q}((R_0(q) + \gamma U^\pi(q\p)) - U^\pi(q))
+\end{array}
+$$</p><h2 class="h2"><span class="span">Q Learning</span></h2><p class="paragraph"><span class="span">Want to average <span class="mathinline">\(R_0(q) + \gamma \max_\sigma U(q\p, \sigma)\)</span>.</span></p><p class="mathmultiline">$$
+\begin{array}{ll}
+    U(q, \sigma) := 0 & \forall (q, \sigma) \in Q \times \Sigma \\
+    n_q    := 1 & \forall q \in Q &\\
+    \t{repeat}: & \\
+    (1) &   \t{choose } \sigma \\
+    &   \t{observe transition } q \xrightarrow{\sigma} q\p \\
+    &   U(q, \sigma) \t{ += } \frac{1}{n_q}((R_0(q) + \gamma U(q\p, \sigma\p)) - U(q, \sigma))
+\end{array}
+$$</p><p class="paragraph"><span class="span">But how do we a <span class="mathinline">\(\sigma\)</span> in <span class="mathinline">\((1)\)</span>? Use this algorithm:</span></p><li class="unorderedlistitem"><span class="span">If have probability <span class="mathinline">\(p\)</span>: choose random action <span class="mathinline">\(\sigma\)</span>. (<span class="bold">Exploration</span>).</span></li><li class="unorderedlistitem"><span class="span">If not, choose <span class="mathinline">\(\max_\sigma U(q, \sigma)\)</span>. (<span class="bold">Exploitation</span>)</span></li></div></body>
+
+<head><link href="style/main.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

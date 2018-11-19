@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Reinforcement Learning</span></h1><p class="mathmultiline">$$
+\newcommand{\ti}[1]{\textit{#1}}
+\newcommand{\Stay}{\ti{Stay}}
+\newcommand{\Bust}{\ti{Bust}}
+\newcommand{\Hit}{\ti{Hit}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\p}{^\prime}
+$$</p><h2 class="h2"><span class="span">Midterm</span></h2><li class="unorderedlistitem"><span class="span">Formalize a state machine <span class="mathinline">\(M = (Q, \Sigma, \Delta, q_0, F)\)</span></span></li><li class="unorderedlistitem"><span class="span">Understand when to use DFS, BFS, UCS, IDS (iterative DFS)</span></li><li class="unorderedlistitem"><span class="span">Recognize when a heuristic is admissible</span></li><li class="unorderedlistitem"><span class="span">Understand how to apply minimax, alpha-beta</span></li><h2 class="h2"><span class="span">Learning BlackJack</span></h2><p class="paragraph"><span class="span">We have the setup</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    M &= (Q, \Sigma, \Delta, q_0, F) \\
+    Q &= \{ A19, A20, S19, S20, S21, \ti{Bust} \} \\
+    \Sigma &= \{ \ti{Hit}, \ti{Stay} \} \\
+    \Delta &= \{ (A19, \Stay, S19), (A19, \Hit, A20), \dots \} \\
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">and payoffs</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    \forall t \geq 0 &,
+    R_t(S19)   &=  0.27 \\
+    R_t(S20)   &=  0.58 \\
+    R_t(S21)   &=  0.88 \\
+    R_t(\Bust) &= -1.00 \\
+    R_t(A19)   &=  0.00 \\
+    R_t(A20)   &=  0.00
+\end{aligned}
+$$</p><img src="graphs/21.blackjack.png" class="image"><h2 class="h2"><span class="span">Markov Decision Process (MDP)</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A <span class="bold">Markov Decision Process (MDP)</span> is <span class="mathinline">\((M,R,w)\)</span> where</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    M &= (Q, \Sigma, \Delta, q_0, F) \text{ (state machine)} \\
+    R &: Q \times \N \rightarrow \R \text{ (reward function)} \\
+    w &: \Delta \rightarrow \R \text{ such that } \forall q, \sigma : \sum_{(q,\sigma, q\p \in \Delta)} w(\langle q, \sigma, q\p \rangle) = 1 \text{ (weights)}
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">Also, assume <span class="mathinline">\(R(q,t) = \gamma \cdot R(q, t-1)\)</span> where <span class="mathinline">\(\gamma\)</span> is a <span class="italic">discount</span> such that <span class="mathinline">\(0 < \gamma \leq 1\)</span>.</span></p><p class="paragraph"><span class="span">Some shorthand</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\forall t \geq 0 : R_t(q) := R(q,t)\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\forall \langle q, \sigma, q\p \rangle \in \Delta : P(q\p \mid q, \sigma) := w(\langle q, \sigma, q\p \rangle)\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots := \langle (q,\sigma_0,q_1), (q_1, \sigma_1, q_2), \dots \rangle\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\text{reward}(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = \sum_{i} R_i(q_i)\)</span></span></li><li class="unorderedlistitem"><span class="span">the above goes to <span class="mathinline">\(P(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = P(q_1 \mid q, \sigma_0) \cdot P(q_2 \mid q_1, \sigma_1) \cdots P(q_n \mid q_{n-1}, \sigma_{n-1})\)</span>.</span></li><h2 class="h2"><span class="span">BlackJack</span></h2><p class="paragraph"><span class="span">Going back to BlackJack:</span></p><p class="mathmultiline">$$
+    U^\pi(A19) =
+    \text{reward}(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} S21)
+    P(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} S21) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} \Bust)
+    P(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} \Bust) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} S21)
+    P(A19 \xrightarrow{\Hit} S21) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} \Bust)
+    P(A19 \xrightarrow{\Hit} \Bust) \\
+$$</p></div></body>
+
+<head><link type="text/css" href="style/main.css" rel="stylesheet">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

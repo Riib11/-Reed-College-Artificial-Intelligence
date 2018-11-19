@@ -1,0 +1,13 @@
+digraph {
+    graph[ratio=0.5]
+
+    A19 -> S19 [label=Stay]
+    A19 -> Bust [label=Hit]
+    A19 -> S21 [label=Hit]
+    A19 -> A20 [label=Hit]
+
+    A20 -> Bust [label=Hit]
+    A20 -> S20 [label=Stay]
+    A20 -> S21 [label=Hit]
+    A20 -> Bust [label=Hit]
+}

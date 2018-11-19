@@ -1,5 +1,7 @@
 # Variants of MiniMax
 
+::style style/main.css
+
 ## Loop States
 
 _Definition_. A *loop state* is a state in the expansion of a game tree that is the same as a state the appears early in the game tree.

@@ -1,0 +1,86 @@
+# Reinforcement Learning
+
+::style style/main.css
+
+$$
+\newcommand{\ti}[1]{\textit{#1}}
+\newcommand{\Stay}{\ti{Stay}}
+\newcommand{\Bust}{\ti{Bust}}
+\newcommand{\Hit}{\ti{Hit}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\p}{^\prime}
+$$
+
+## Midterm
+
+- Formalize a state machine $M = (Q, \Sigma, \Delta, q_0, F)$
+- Understand when to use DFS, BFS, UCS, IDS (iterative DFS)
+- Recognize when a heuristic is admissible
+- Understand how to apply minimax, alpha-beta
+
+## Learning BlackJack
+
+We have the setup
+
+$$
+\begin{aligned}
+    M &= (Q, \Sigma, \Delta, q_0, F) \\
+    Q &= \{ A19, A20, S19, S20, S21, \ti{Bust} \} \\
+    \Sigma &= \{ \ti{Hit}, \ti{Stay} \} \\
+    \Delta &= \{ (A19, \Stay, S19), (A19, \Hit, A20), \dots \} \\
+\end{aligned}
+$$
+
+and payoffs
+
+$$
+\begin{aligned}
+    \forall t \geq 0 &,
+    R_t(S19)   &=  0.27 \\
+    R_t(S20)   &=  0.58 \\
+    R_t(S21)   &=  0.88 \\
+    R_t(\Bust) &= -1.00 \\
+    R_t(A19)   &=  0.00 \\
+    R_t(A20)   &=  0.00
+\end{aligned}
+$$
+
+% graphs/21.blackjack.png
+
+## Markov Decision Process (MDP)
+
+_Definition_. A *Markov Decision Process (MDP)* is $(M,R,w)$ where
+$$
+\begin{aligned}
+    M &= (Q, \Sigma, \Delta, q_0, F) \text{ (state machine)} \\
+    R &: Q \times \N \rightarrow \R \text{ (reward function)} \\
+    w &: \Delta \rightarrow \R \text{ such that } \forall q, \sigma : \sum_{(q,\sigma, q\p \in \Delta)} w(\langle q, \sigma, q\p \rangle) = 1 \text{ (weights)}
+\end{aligned}
+$$
+Also, assume $R(q,t) = \gamma \cdot R(q, t-1)$ where $\gamma$ is a _discount_ such that $0 < \gamma \leq 1$.
+
+Some shorthand
+
+- $\forall t \geq 0 : R_t(q) := R(q,t)$
+- $\forall \langle q, \sigma, q\p \rangle \in \Delta : P(q\p \mid q, \sigma) := w(\langle q, \sigma, q\p \rangle)$
+- $q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots := \langle (q,\sigma_0,q_1), (q_1, \sigma_1, q_2), \dots \rangle$
+- $\text{reward}(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = \sum_{i} R_i(q_i)$
+- the above goes to $P(q \xrightarrow{\sigma_0} q_1 \xrightarrow{\sigma_1} q_2 \rightarrow \cdots \xrightarrow{\sigma_{n-1}} q_n) = P(q_1 \mid q, \sigma_0) \cdot P(q_2 \mid q_1, \sigma_1) \cdots P(q_n \mid q_{n-1}, \sigma_{n-1})$.
+
+## BlackJack
+
+Going back to BlackJack:
+
+$$
+    U^\pi(A19) =
+    \text{reward}(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} S21)
+    P(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} S21) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} \Bust)
+    P(A19 \xrightarrow{\Hit} A20 \xrightarrow{\Hit} \Bust) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} S21)
+    P(A19 \xrightarrow{\Hit} S21) \\
+    + \text{reward}(A19 \xrightarrow{\Hit} \Bust)
+    P(A19 \xrightarrow{\Hit} \Bust) \\
+$$
