@@ -182,9 +182,10 @@ class ExactInference(InferenceModule):
                 newModel = emissionModel[trueDistance]
                 oldBelief = beliefs[pos]
                 # calculate probabilities
-                prob_new_evidence_given_old_belief = sad
+                prob_new_evidence_given_old_belief = 0.0 # P(e_t+1 | X_t+1)
+                prob_new_belief_given_old_evidence = 0.0 # P(X_t+1 | e_t)
                 # update to new belief
-                beliefs[pos] = 
+                beliefs[pos] = prob_new_evidence_given_old_belief * prob_new_belief_given_old_evidence
 
             for pos in self.legalPositions:
                 trueDistance = util.manhattanDistance(pos, pacmanPosition)
