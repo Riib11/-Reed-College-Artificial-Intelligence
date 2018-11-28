@@ -154,20 +154,9 @@ class ExactInference(InferenceModule):
 
         # "*** YOUR CODE HERE ***"
 
-        def distance(pos):
-            return util.manhattanDistance(pos, pacmanPosition)
-
-        def isAtDistance(pos, dist):
-            return distance(pos) == dist
-
-        def countAtDistance(dist):
-            return float(len([pos for pos in self.legalPositions
-                if isAtDistance(pos, dist)]))
-
-        def probOfDistance(dist):
-            return countAtDistance(dist) / float(len(self.legalPositions))
-
         beliefs = self.getBeliefDistribution()
+
+        print "updating evidence!"
         
         # tracked ghost has been captured
         if noisyDistance == None:
@@ -178,31 +167,29 @@ class ExactInference(InferenceModule):
         # tracked ghost has NOT been captured
         else:
             """
-                P(theta | X, alpha) =
-                    P(X | theta, alpha) P(theta | alpha)
-                    / P(X | alpha)
+            for each position
+                
+                P(X_t+1 | e_t+1) = P(e_t+1 | X_t+1) P(X_t+1 | e_t)
 
-                where
-                    theta : "ghost is at pos"
-                    alpha : old belief for ghost position
-                    X     : new model for ghost position
+            where
+                x_t: new belief
+                e_t: new evidence
+                e_t-1: old evidence
             """
+
             for pos in self.legalPositions:
-                # new model for ghost position
                 trueDistance = util.manhattanDistance(pos, pacmanPosition)
                 newModel = emissionModel[trueDistance]
-                # old belief for ghost position
                 oldBelief = beliefs[pos]
-                # likelihood
-                # prior
-                # evidence
-                beliefs[pos] = (
-                    P(newModel | "ghost is at pos", oldBelief)
-                    * P("ghost is at pos" | oldBelief)
-                    / P(newModel | oldBelief)
-                )
+                # calculate probabilities
+                prob_new_evidence_given_old_belief = 
+                # update to new belief
+                beliefs[pos] = 
 
-
+            for pos in self.legalPositions:
+                trueDistance = util.manhattanDistance(pos, pacmanPosition)
+                newModel = emissionModel[trueDistance]
+                oldBelief = beliefs[pos]
                 beliefs[pos] += emissionModel[trueDistance]
 
         beliefs.normalize()
@@ -276,8 +263,21 @@ class ExactInference(InferenceModule):
         positions after a time update from a particular position.
         """
         # "*** YOUR CODE HERE ***"
-        return
-        beliefs_new = util.Counter()
+
+        """
+        To update for time:
+
+            P(x_t | e_t-1) = Sum{x_t-1} P(x_t-1 | e_t-1) P(x_t | x_t-1)
+
+        where
+            x_t: current belief
+            x_t-1: old belief
+            e_t-1: old evidence
+        """
+
+        print "updating time!"
+
+        beliefs = self.getBeliefDistribution()
         # for each possible ghost position
         for pos, prob in self.getBeliefDistribution().items():
             # newPostDist : Position => Probability that ghost will move here
@@ -285,10 +285,9 @@ class ExactInference(InferenceModule):
             # for each possible ghost position to move to
             for pos_new, prob_new in newPosDist.items():
                 # increment new belief by P(ghost was in original pos) * P(ghost is in new pos)
-                beliefs_new[pos_new] += prob * prob_new
+                beliefs[pos_new] += prob * prob_new
 
-        beliefs_new.normalize()
-        self.beliefs = beliefs_new
+        beliefs.normalize()
 
 
     def getBeliefDistribution(self):
