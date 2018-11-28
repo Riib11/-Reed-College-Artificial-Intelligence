@@ -182,7 +182,7 @@ class ExactInference(InferenceModule):
                 newModel = emissionModel[trueDistance]
                 oldBelief = beliefs[pos]
                 # calculate probabilities
-                prob_new_evidence_given_old_belief = 
+                prob_new_evidence_given_old_belief = sad
                 # update to new belief
                 beliefs[pos] = 
 
