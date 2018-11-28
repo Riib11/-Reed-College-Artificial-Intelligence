@@ -1,0 +1,108 @@
+# Bayesian Inference
+
+::style style/main.css
+
+$$
+\newcommand{\dbot}{\mathbin{\text{$\bot\mkern-8mu\bot$}}}
+\newcommand{\yes}{\text{yes}}
+\newcommand{\no}{\text{no}}
+\newcommand{\p}{^\prime}
+$$
+
+## Bayesian Network
+
+A Bayesian Network is a *DAG* (directed acyclic graph). A graph will *admit* a distribution, which is a mapping between the graph and an expanded Bayesian formula. For example
+
+$$
+    A \rightarrow B \rightarrow C
+$$
+
+admits
+
+$$
+    P(a, b, c) = P(a) P(b | a) P(c | b)
+$$
+
+You can write the dependence tables like this
+
+$$
+\begin{array}{c|c}
+    B & P(A=true | b) \\ \hline
+    false & P(A=true | b=false) \\
+    true  & P(A=true | b=true) \\
+\end{array}
+$$
+
+## Blocking
+
+Given a set $Z$ of nodes, the path
+
+$$
+    x \leftrightarrow w_1 \leftrightarrow \cdots \leftrightarrow w_k \leftrightarrow y
+$$
+
+is blocked by $Z$ is $\exists w_i$ such that one of the following is true:
+- $w_i \in Z$ and $w_i$ is the center of a fork $x \leftarrow w_i \rightarrow y$ or a chain $x \rightarrow w_i \rightarrow z$.
+- $w_i \not\in Z$, no descendant of $w_i \in Z$, and $w_i$ is the center of collider $x \rightarrow w_i \leftrightarrow z$.
+
+If $P$ isa distribution such that factors according to DAG $G$, then $X \bot Y | Z$ in $G$ $\implies$ $X \dbot Y | Z$ in $P$.
+
+If every path between $X$ and $Y$ is blocked by $Z$, then $X$ and $Y$ are *d-separeted* by $Z$:
+
+$$
+    X \bot Y | Z
+$$
+
+_i.e._ $X \bot Y$ in $G$ is there is an unblocked path from $X$ to $Y$ in $G$. Note that the direction of arrows don't matter for this path! Can flow 'up' arrows.
+
+### Example
+
+Consider this example:
+
+% graphs/11-26_dag01.png
+
+This graph actually represents the Monty Hall problem, where $G$ is "guess", $O$ is "opened door", $C$ is "correct door", $R$ is "revised guess", $W$ is "win" $P$ is "policy"
+
+$$
+\begin{array}{l|c}
+G \bot P | \varnothing? & \yes \\
+G \bot P | \{ W \}? & \no \\
+G \bot W | \varnothing? & \yes \\
+G \bot W | \{ O \}? & \no \\
+G \bot W | \{ R \}? & \no \\
+G \bot W | \{ R, C \}? & \yes
+\end{array}
+$$
+
+## TODO
+
+_Definition_. Law of *Conditional Probability*
+$$
+    P(x_1 | x_2, \dots, x_k)
+    = \frac{P(x_1, x_2, \dots, x_k)}{P(x_2, \dots, x_k)}
+$$
+
+_Definition_. Law of *Total Probability*
+$$
+    P(x_1, x_2, \dots, x_{n-1})
+    = \sum_{x_n} P(x_1, x_2, \dots, x_n)
+$$
+
+
+### Example
+
+Given a fork
+
+% graphs/28.bnfork.png
+
+then we have $X \dbot Y | Z$ and $X \not\dbot Y$. Then,
+
+$$
+\begin{aligned}
+    P(x | y, z)
+    &= \frac{P(x, y, z)}{P(y, z)} \\
+    &= \frac{P(x, y, z)}{\sum_{x\p} P(x\p, y, z)} \\
+    &= \frac{P(z) P(x | z) P(y | z)}{P(z) P(x\p | z) P(y | z) \sum_{x\p} P(x\p | z)} \\
+    &= P(x | z)
+\end{aligned}
+$$

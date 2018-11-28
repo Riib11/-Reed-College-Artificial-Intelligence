@@ -1,0 +1,7 @@
+digraph {
+    graph [ratio=1]
+    "Fire Safety" -> "House Fire"
+    "Bonfire" -> "Smoke"
+    "Bonfire" -> "Invitation"
+    "House Fire" -> "Smoke"
+}

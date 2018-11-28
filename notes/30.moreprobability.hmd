@@ -1,0 +1,118 @@
+# More Probability
+
+::style style/main.css
+
+$$
+\newcommand{\dbot}{\mathbin{\text{$\bot\mkern-8mu\bot$}}}
+\newcommand{\p}{^\prime}
+\newcommand{\t}[1]{\text{#1}}
+$$
+
+## Homework
+
+### Network 1
+
+% graphs/30_stars.png
+
+- $F_1 \dbot F_2$
+- $M_1 \dbot M_2 \mid N$
+- $F_1 \dbot N \mid M_1$
+
+So this one looks good!
+
+
+### Network 2
+
+% graphs/30_stars02.png
+
+- $M_1 \dbot M_2$. This is wrong though! So this graph is wrong.
+
+## Genes
+
+% graphs/30_gen01.png
+
+$$
+\begin{aligned}
+    P(R=AB \mid T=A)
+    &= \frac{P(R=AB, T=A)}{P(T=A)}
+    \\
+    P(R=AB, T=A)
+    &= \sum_{r^*} \sum_{s^*} \sum_{t^*}
+        \sum_{m^*} \sum_{f^*} \sum_{s^*}
+        P(R=AB, T=A, r^*, s^*, t^*, m, f, s)
+\end{aligned}
+$$
+but this has 7776 terms! So lets make it simpler
+$$
+\begin{aligned}
+    &= \sum \sum \sum \sum \sum
+        P(r^*) P(s^*)
+        P(r \mid r^*) P(m \mid r^*)
+        P(f \mid s^*) P(s \mid s^*)
+        P(t^* \mid m, f)
+        P(t \mid t^*)
+    \\
+    &= \sum \sum \sum \sum \sum
+        g_1(r^*) g_2(s^*)
+        g_3(r, r^*) g_4(m, r^*)
+        g_5(f, s^*) g_6(s, s^*)
+        g_7(t, m, f) g_8(t, t^*)
+    \\
+    &= \sum_{m} \sum_{f} \sum_{t^*}
+       \sum_{r^*} \sum_{s^*} \sum_{s}
+        g_1(r^*)
+        g_2(s^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_5(f, s^*)
+        g_6(s, s^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+    \\
+    &= \sum_{m} \sum_{f} \sum_{t^*}
+       \sum_{r^*} \sum_{s^*}
+        g_1(r^*)
+        g_2(s^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_5(f, s^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+        ( h_1(s^*) = \sum_s g_6(s, s^*) )
+    \\
+    &= \sum_{m} \sum_{t^*} \sum_{r^*}
+        g_1(r^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+        (h_2 = \sum_{s^*} g_2(s^*) g_5(f, s^*) h_1(s^*))
+    \\
+    &= \dots \t{keep pushing summation inwards} \dots
+\end{aligned}
+$$
+
+Where
+
+$$
+\begin{aligned}
+    h_1(s^*)
+        &= \sum_s g_6(s, s^*) \\
+    h_2(f)
+        &= \sum_{s^*} g_2(s^*) g_5(f, s^*) h_1(s^*) \\
+    h_3(r, m)
+        &= \sum_{r^*} g_1(r^*) g_3(r, r^*) g_4(m, r^*) \\
+    h_4(t, m, f)
+        &= \sum_{t^*} g_7(t, m, f) g_8(t, t^*) \\
+    h_5(t, m)
+        &= \sum_{f^*} h_2(f) h_4(t, m, f) \\
+    h_6(r, t)
+        &= \sum_m h_3(r, m) h_5(t, m) \\
+\end{aligned}
+$$
+
+By evaluating these, you get the value of $P(R=AB, T=A)$ in 414 operations! This is much less than calculating out all the sums originally.
+
+## Next Homework
+
+14.14 (a)-(c)

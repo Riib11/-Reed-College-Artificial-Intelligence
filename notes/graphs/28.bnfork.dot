@@ -1,0 +1,5 @@
+digraph {
+    graph [ratio=1]
+    Z -> X
+    Z -> Y
+}

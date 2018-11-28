@@ -1,0 +1,14 @@
+digraph {
+    graph [ratio=1]
+    G -> R
+    G -> O
+
+    O -> R
+    
+    P -> R
+
+    R -> W
+
+    C -> O
+    C -> W
+}

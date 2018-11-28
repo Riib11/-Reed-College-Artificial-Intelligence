@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">More Probability</span></h1><p class="mathmultiline">$$
+\newcommand{\dbot}{\mathbin{\text{$\bot\mkern-8mu\bot$}}}
+\newcommand{\p}{^\prime}
+\newcommand{\t}[1]{\text{#1}}
+$$</p><h2 class="h2"><span class="span">Homework</span></h2><h3 class="h3"><span class="span">Network 1</span></h3><img class="image" src="graphs/30_stars.png"><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(F_1 \dbot F_2\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(M_1 \dbot M_2 \mid N\)</span></span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(F_1 \dbot N \mid M_1\)</span></span></li><p class="paragraph"><span class="span">So this one looks good!</span></p><h3 class="h3"><span class="span">Network 2</span></h3><img class="image" src="graphs/30_stars02.png"><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(M_1 \dbot M_2\)</span>. This is wrong though! So this graph is wrong.</span></li><h2 class="h2"><span class="span">Genes</span></h2><img class="image" src="graphs/30_gen01.png"><p class="mathmultiline">$$
+\begin{aligned}
+    P(R=AB \mid T=A)
+    &= \frac{P(R=AB, T=A)}{P(T=A)}
+    \\
+    P(R=AB, T=A)
+    &= \sum_{r^*} \sum_{s^*} \sum_{t^*}
+        \sum_{m^*} \sum_{f^*} \sum_{s^*}
+        P(R=AB, T=A, r^*, s^*, t^*, m, f, s)
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">but this has 7776 terms! So lets make it simpler</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    &= \sum \sum \sum \sum \sum
+        P(r^*) P(s^*)
+        P(r \mid r^*) P(m \mid r^*)
+        P(f \mid s^*) P(s \mid s^*)
+        P(t^* \mid m, f)
+        P(t \mid t^*)
+    \\
+    &= \sum \sum \sum \sum \sum
+        g_1(r^*) g_2(s^*)
+        g_3(r, r^*) g_4(m, r^*)
+        g_5(f, s^*) g_6(s, s^*)
+        g_7(t, m, f) g_8(t, t^*)
+    \\
+    &= \sum_{m} \sum_{f} \sum_{t^*}
+       \sum_{r^*} \sum_{s^*} \sum_{s}
+        g_1(r^*)
+        g_2(s^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_5(f, s^*)
+        g_6(s, s^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+    \\
+    &= \sum_{m} \sum_{f} \sum_{t^*}
+       \sum_{r^*} \sum_{s^*}
+        g_1(r^*)
+        g_2(s^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_5(f, s^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+        ( h_1(s^*) = \sum_s g_6(s, s^*) )
+    \\
+    &= \sum_{m} \sum_{t^*} \sum_{r^*}
+        g_1(r^*)
+        g_3(r, r^*)
+        g_4(m, r^*)
+        g_7(t, m, f)
+        g_8(t, t^*)
+        (h_2 = \sum_{s^*} g_2(s^*) g_5(f, s^*) h_1(s^*))
+    \\
+    &= \dots \t{keep pushing summation inwards} \dots
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">Where</span></p><p class="mathmultiline">$$
+\begin{aligned}
+    h_1(s^*)
+        &= \sum_s g_6(s, s^*) \\
+    h_2(f)
+        &= \sum_{s^*} g_2(s^*) g_5(f, s^*) h_1(s^*) \\
+    h_3(r, m)
+        &= \sum_{r^*} g_1(r^*) g_3(r, r^*) g_4(m, r^*) \\
+    h_4(t, m, f)
+        &= \sum_{t^*} g_7(t, m, f) g_8(t, t^*) \\
+    h_5(t, m)
+        &= \sum_{f^*} h_2(f) h_4(t, m, f) \\
+    h_6(r, t)
+        &= \sum_m h_3(r, m) h_5(t, m) \\
+\end{aligned}
+$$</p><p class="paragraph"><span class="span">By evaluating these, you get the value of <span class="mathinline">\(P(R=AB, T=A)\)</span> in 414 operations! This is much less than calculating out all the sums originally.</span></p><h2 class="h2"><span class="span">Next Homework</span></h2><p class="paragraph"><span class="span">14.14 (a)-(c)</span></p></div></body>
+
+<head><link href="style/main.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

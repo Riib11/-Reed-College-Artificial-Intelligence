@@ -38,8 +38,9 @@ body {
 }
 
 .image {
+    position: relative;
     max-width: 800px;
-    margin: auto;
+    margin-left: 250px;
 }
 
 .codeinline {

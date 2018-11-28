@@ -1,0 +1,12 @@
+digraph {
+    graph [ratio=1]
+    "R*" -> R
+    "R*" -> M
+    M -> "T*"
+
+    "S*" -> F
+    "S*" -> S
+    F -> "T*"
+
+    "T*" -> T
+}
