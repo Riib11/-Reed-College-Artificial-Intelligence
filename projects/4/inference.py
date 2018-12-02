@@ -155,7 +155,7 @@ class ExactInference(InferenceModule):
         # pacmanPosition : Position
         pacmanPosition = gameState.getPacmanPosition()
 
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
         beliefs = deepcopy(self.getBeliefDistribution())
         
@@ -240,7 +240,7 @@ class ExactInference(InferenceModule):
         are used and how they combine to give us a belief distribution over new
         positions after a time update from a particular position.
         """
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
         """
         To update for time:
@@ -296,7 +296,7 @@ class ParticleFilter(InferenceModule):
         Storing your particles as a Counter (where there could be an associated
         weight with each position) is incorrect and may produce errors.
         """
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
         self.particles    = []
         self.weights      = []
@@ -348,7 +348,7 @@ class ParticleFilter(InferenceModule):
         # emissionModel :: trueDistance => P(noisyDistance | trueDistance)
         emissionModel = busters.getObservationDistribution(noisyDistance)
         pacmanPosition = gameState.getPacmanPosition()
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
         
         # if just captured a ghost
         if noisyDistance == None:
@@ -390,7 +390,7 @@ class ParticleFilter(InferenceModule):
         util.sample(Counter object) is a helper method to generate a sample from
         a belief distribution.
         """
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
         newParticles = []
         for pos in self.particles:
@@ -406,7 +406,7 @@ class ParticleFilter(InferenceModule):
         essentially converts a list of particles into a belief distribution (a
         Counter object)
         """
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
         beliefs = util.Counter()
         for i, pos in enumerate(self.particles):
@@ -463,8 +463,8 @@ class JointParticleFilter:
         self.ghostAgents = []
         self.legalPositions = legalPositions
 
-        self.particleSpace = itertools.product \
-            ( [self.legalPositions] * self.numGhosts )
+        self.particleSpace = list(itertools.product(
+            self.legalPositions, repeat=4))
 
         self.initializeParticles()
 
@@ -490,13 +490,11 @@ class JointParticleFilter:
         Storing your particles as a Counter (where there could be an associated
         weight with each position) is incorrect and may produce errors.
         """
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
 
-        self.particles = []
-        self.weights = []
-        for _ in range(self.numParticles):
-            self.particles.append(random.choice(self.particleSpace))
-            self.weights.append(1)
+        random.shuffle(self.particleSpace)
+        self.particles = self.particleSpace[0:self.numParticles]
+        self.weights = [1] * self.numParticles
 
     def addGhostAgent(self, agent):
         """
@@ -558,7 +556,7 @@ class JointParticleFilter:
                     trueDistance = util.manhattanDistance(ps[iGhost], gameState.getPacmanPosition())
                     weight += emissionModels[iGhost][trueDistance] # TODO: should be `+=` or `*=`?
             # combine weights (average)
-            self.weights[ps] = weight / sef.numGhosts # TODO: this might need to change, based on above, as well
+            self.weights[iPart] = weight / self.numGhosts # TODO: this might need to change, based on above, as well
 
         # if all particles are assigned 0 weight, resample uniformly
         if self.getBeliefDistribution().totalCount() == 0:
@@ -637,7 +635,7 @@ class JointParticleFilter:
         self.particles = newParticles
 
     def getBeliefDistribution(self):
-        # "*** YOUR CODE HERE ***"
+        "*** YOUR CODE HERE ***"
         
         beliefs = util.Counter()
         for i, ps in enumerate(self.particles):
