@@ -17,6 +17,7 @@ import util
 import random
 import busters
 import game
+from copy import deepcopy
 
 class InferenceModule:
     """
@@ -120,6 +121,8 @@ class ExactInference(InferenceModule):
         for p in self.legalPositions: self.beliefs[p] = 1.0
         self.beliefs.normalize()
 
+        self.beliefs_history = [self.beliefs]
+
     def observe(self, observation, gameState):
         """
         Updates beliefs based on the distance observation and Pacman's position.
@@ -154,9 +157,7 @@ class ExactInference(InferenceModule):
 
         # "*** YOUR CODE HERE ***"
 
-        beliefs = self.getBeliefDistribution()
-
-        print "updating evidence!"
+        beliefs = deepcopy(self.getBeliefDistribution())
         
         # tracked ghost has been captured
         if noisyDistance == None:
@@ -167,48 +168,24 @@ class ExactInference(InferenceModule):
         # tracked ghost has NOT been captured
         else:
             """
-            for each position
+            Observation update:
                 
-                P(X_t+1 | e_t+1) = P(e_t+1 | X_t+1) P(X_t+1 | e_t)
+                P(h_t | o_1, ..., o_t) _alpha_ P(h_t | o_1, ..., o_t-1) P(h_t | o_t)
+                
+                or
+                
+                {new belief} = {old belief} * {new consideration}
 
-            where
-                x_t: new belief
-                e_t: new evidence
-                e_t-1: old evidence
             """
-
             for pos in self.legalPositions:
                 trueDistance = util.manhattanDistance(pos, pacmanPosition)
-                newModel = emissionModel[trueDistance]
+                newConsideration = emissionModel[trueDistance]
                 oldBelief = beliefs[pos]
-                # calculate probabilities
-                prob_new_evidence_given_old_belief = 0.0 # P(e_t+1 | X_t+1)
-                prob_new_belief_given_old_evidence = 0.0 # P(X_t+1 | e_t)
-                # update to new belief
-                beliefs[pos] = prob_new_evidence_given_old_belief * prob_new_belief_given_old_evidence
 
-            for pos in self.legalPositions:
-                trueDistance = util.manhattanDistance(pos, pacmanPosition)
-                newModel = emissionModel[trueDistance]
-                oldBelief = beliefs[pos]
-                beliefs[pos] += emissionModel[trueDistance]
+                beliefs[pos] = oldBelief * newConsideration
 
         beliefs.normalize()
-
-        # OLD CODE
-        # # Replace this code with a correct observation update
-        # # Be sure to handle the "jail" edge case where the ghost is eaten
-        # # and noisyDistance is None
-        # allPossible = util.Counter()
-        # for p in self.legalPositions:
-        #     trueDistance = util.manhattanDistance(p, pacmanPosition)
-        #     if emissionModel[trueDistance] > 0:
-        #         allPossible[p] = 1.0
-
-        # "*** END YOUR CODE HERE ***"
-
-        # allPossible.normalize()
-        # self.beliefs = allPossible
+        self.beliefs = beliefs
 
     def elapseTime(self, gameState):
         """
@@ -276,20 +253,16 @@ class ExactInference(InferenceModule):
             e_t-1: old evidence
         """
 
-        print "updating time!"
-
         beliefs = self.getBeliefDistribution()
-        # for each possible ghost position
-        for pos, prob in self.getBeliefDistribution().items():
-            # newPostDist : Position => Probability that ghost will move here
-            pos_dist_new = self.getPositionDistribution(self.setGhostPosition(gameState, pos))
-            # for each possible ghost position to move to
-            for pos_new, prob_new in newPosDist.items():
-                # increment new belief by P(ghost was in original pos) * P(ghost is in new pos)
-                beliefs[pos_new] += prob * prob_new
+        beliefs_new = util.Counter()
 
-        beliefs.normalize()
+        for pos_source, prob_source in beliefs.items():
+            dist_target = self.getPositionDistribution(
+                self.setGhostPosition(gameState, pos_source))
+            for pos_target, prob_target in dist_target.items():
+                beliefs_new[pos_target] += beliefs[pos_source] * prob_target
 
+        self.beliefs = beliefs_new
 
     def getBeliefDistribution(self):
         return self.beliefs
@@ -323,7 +296,19 @@ class ParticleFilter(InferenceModule):
         Storing your particles as a Counter (where there could be an associated
         weight with each position) is incorrect and may produce errors.
         """
-        "*** YOUR CODE HERE ***"
+        # "*** YOUR CODE HERE ***"
+
+        self.particles = []
+        positions = gameState.positions
+        particlesPerPos = self.numParticles // len(positions)
+        particlesLeftover = self.numParticles - (positions * particlesPerPos)
+        # evenly distributed particles
+        for pos in positions:
+            self.particles += [pos for _ in range(particlesPerPos)]
+        # leftover particles
+        for pos in positions[0:particlesLeftover]:
+            self.particles.append(pos)
+
 
     def observe(self, observation, gameState):
         """

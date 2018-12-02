@@ -163,4 +163,22 @@ class GreedyBustersAgent(BustersAgent):
             [beliefs for i, beliefs in enumerate(self.ghostBeliefs)
              if livingGhosts[i+1]]
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+        bestGhostIndex = 0
+        bestGhostDistance = -1
+        bestGhostPosition = None
+        for i in range(len(livingGhostPositionDistributions)):
+            # distribution :: Position => Float (prob at positon)
+            distribution = livingGhostPositionDistributions[i]
+            bestPos = max(distribution, key = lambda x: distribution[x])
+            bestPosDist = self.distancer.getDistance(pacmanPosition, bestPos)
+            if bestGhostDistance < 0 or bestPosDist < bestGhostDistance:
+                bestGhostIndex = i
+                bestGhostDistance = bestPosDist
+                bestGhostPosition = bestPos
+
+        def distanceToGhost(action):
+            succPos = Actions.getSuccessor(pacmanPosition, action)
+            return self.distancer.getDistance(succPos, bestGhostPosition)
+
+        return min(legal, key=distanceToGhost)
