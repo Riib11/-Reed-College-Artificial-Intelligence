@@ -1,0 +1,12 @@
+digraph {
+  graph [ratio=1]
+  B -> I
+  B -> G
+
+  M -> I
+  M -> G
+
+  I -> G
+
+  G -> J
+}

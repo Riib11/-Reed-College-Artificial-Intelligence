@@ -1,0 +1,7 @@
+graph {
+    graph[ratio=1]
+    B -- M
+    M -- G
+    B -- G
+    G -- J
+}
