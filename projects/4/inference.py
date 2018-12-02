@@ -345,6 +345,7 @@ class ParticleFilter(InferenceModule):
         distance between a particle and Pacman's position.
         """
         noisyDistance = observation
+        # emissionModel :: trueDistance => P(noisyDistance | trueDistance)
         emissionModel = busters.getObservationDistribution(noisyDistance)
         pacmanPosition = gameState.getPacmanPosition()
         # "*** YOUR CODE HERE ***"
@@ -352,20 +353,26 @@ class ParticleFilter(InferenceModule):
         # if just captured a ghost
         if noisyDistance == None:
             self.particles = [self.getJailPosition() for _ in range(self.numParticles)]
-            self.weights = [1 for _ in range(self.numParticles)]
+            self.weights = [1.0 for _ in range(self.numParticles)]
             return
 
         # update from observation
         for i, pos in enumerate(self.particles):
+            # dist :: P(noisyDistance | trueDistance)
             dist = util.manhattanDistance(pos, pacmanPosition)
             weight = emissionModel[dist]
-            self.weights[i] *= weight
+            self.weights[i] = weight
 
-        # if all particles are assigned 0 weight, resample
+        # if all particles are assigned 0 weight, resample uniformly
         if self.getBeliefDistribution().totalCount() == 0:
             self.initializeUniformly(gameState)
 
-
+        # otherwise, resample based on weights
+        else:
+            beliefs = self.getBeliefDistribution()
+            newParticles = [ util.sample(beliefs)
+                for _ in range(self.numParticles) ]
+            self.particles = newParticles
 
 
 
