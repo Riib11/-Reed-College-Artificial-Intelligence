@@ -363,7 +363,7 @@ class ParticleFilter(InferenceModule):
 
         # if all particles are assigned 0 weight, resample
         if self.getBeliefDistribution().totalCount() == 0:
-            self.initializeUniformly()
+            self.initializeUniformly(gameState)
 
 
 
@@ -387,7 +387,7 @@ class ParticleFilter(InferenceModule):
 
         newParticles = []
         for pos in self.particles:
-            newPostDist = self.getPositionDistribution(self.setGhostPosition(gameState, pos))
+            newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, pos))
             newParticles.append(util.sample(newPosDist))
         self.particles = newParticles
 
