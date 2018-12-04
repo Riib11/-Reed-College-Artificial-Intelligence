@@ -648,10 +648,9 @@ class JointParticleFilter:
             prevGhostPositions = setGhostPositions(gameState, oldParticle)
             for iGhost in range(self.numGhosts):
                 # sample from the possible ghost movement targets
-                print iGhost
                 newParticle[iGhost] = util.sample(
                     getPositionDistributionForGhost(
-                        prevGhostPositions, iGhost, self.ghostAgents[iGhost-1] ))
+                        prevGhostPositions, iGhost, self.ghostAgents[iGhost] ))
 
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
