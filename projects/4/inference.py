@@ -537,13 +537,23 @@ class JointParticleFilter:
         """
         pacmanPosition = gameState.getPacmanPosition()
         noisyDistances = gameState.getNoisyGhostDistances()
-        if len(noisyDistances) < self.numGhosts:
-            return
+        if len(noisyDistances) < self.numGhosts: return
         emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
         "*** YOUR CODE HERE ***"
 
+        # print ""
+        # for k, v in self.getBeliefDistribution().items(): print k, v
+
+        pacmanPosition = gameState.getPacmanPosition()
+
+        # update particles based on observation
         for iPart, ps in enumerate(self.particles):
+            # is on top of pacman
+            if any([pos == pacmanPosition for pos in ps]):
+                self.weights[iPart] = 0
+                continue
+
             weight = 0
             for iGhost in range(self.numGhosts):
                 # if just captured ghost, you know its in jail
@@ -552,12 +562,11 @@ class JointParticleFilter:
                     self.particles[iPart] = \
                         self.getParticleWithGhostInJail(ps, iGhost)
                     weight += 1.0
-    
-                # otherwise, handle normal observation
+                # otherwise, handle normal (ghost wasn't captured)
                 else:
-                    trueDistance = util.manhattanDistance \
-                        (ps[iGhost], gameState.getPacmanPosition())
-                    weight += emissionModels[iGhost][trueDistance]
+                    weight += emissionModels[iGhost] \
+                    [ util.manhattanDistance \
+                        (ps[iGhost], pacmanPosition) ]
             # combine weights (average)
             self.weights[iPart] = weight #/ self.numGhosts
 
@@ -567,22 +576,18 @@ class JointParticleFilter:
         # if all particles are assigned 0 weight, resample uniformly
         if beliefs.totalCount() == 0:
             self.initializeParticles()
+            # and also make to believe
+            # all known jailed ghosts are in jail
+            for iGhost in range(self.numGhosts):
+                if noisyDistances[iGhost] == None:
+                    for iPart, ps in enumerate(self.particles):
+                        self.particles[iPart] = \
+                            self.getParticleWithGhostInJail(ps, iGhost)
 
         # otherwise, resample based on weights
         else:
             self.particles = [ util.sample(beliefs)
                 for _ in range(self.numParticles) ]
-
-        return
-        "*** OLD PARTICLE CODE ***"
-
-        # update from observation
-        for i, pos in enumerate(self.particles):
-            # dist :: P(noisyDistance | trueDistance)
-            dist = util.manhattanDistance(pos, pacmanPosition)
-            weight = emissionModel[dist]
-            self.weights[i] = weight
-
 
 
     def getParticleWithGhostInJail(self, particle, ghostIndex):
