@@ -464,7 +464,7 @@ class JointParticleFilter:
         self.legalPositions = legalPositions
 
         self.particleSpace = list(itertools.product(
-            self.legalPositions, repeat=4))
+            self.legalPositions, repeat=self.numGhosts))
 
         self.initializeParticles()
 
@@ -548,26 +548,41 @@ class JointParticleFilter:
             for iGhost in range(self.numGhosts):
                 # if just captured ghost, you know its in jail
                 if noisyDistances[iGhost] == None:
-                    self.particles[iPart] = self.getParticleWithGhostInJail(ps, iGhost)
+                    # set each particle to believe this ghost is in jail
+                    self.particles[iPart] = \
+                        self.getParticleWithGhostInJail(ps, iGhost)
                     weight += 1.0
     
                 # otherwise, handle normal observation
                 else:
-                    trueDistance = util.manhattanDistance(ps[iGhost], gameState.getPacmanPosition())
-                    weight += emissionModels[iGhost][trueDistance] # TODO: should be `+=` or `*=`?
+                    trueDistance = util.manhattanDistance \
+                        (ps[iGhost], gameState.getPacmanPosition())
+                    weight += emissionModels[iGhost][trueDistance]
             # combine weights (average)
-            self.weights[iPart] = weight / self.numGhosts # TODO: this might need to change, based on above, as well
+            self.weights[iPart] = weight #/ self.numGhosts
+
+        # new belief distribution
+        beliefs = self.getBeliefDistribution()
 
         # if all particles are assigned 0 weight, resample uniformly
-        if self.getBeliefDistribution().totalCount() == 0:
-            self.initializeUniformly(gameState)
+        if beliefs.totalCount() == 0:
+            self.initializeParticles()
 
         # otherwise, resample based on weights
         else:
-            beliefs = self.getBeliefDistribution()
-            newParticles = [ util.sample(beliefs)
+            self.particles = [ util.sample(beliefs)
                 for _ in range(self.numParticles) ]
-            self.particles = newParticles
+
+        return
+        "*** OLD PARTICLE CODE ***"
+
+        # update from observation
+        for i, pos in enumerate(self.particles):
+            # dist :: P(noisyDistance | trueDistance)
+            dist = util.manhattanDistance(pos, pacmanPosition)
+            weight = emissionModel[dist]
+            self.weights[i] = weight
+
 
 
     def getParticleWithGhostInJail(self, particle, ghostIndex):
@@ -629,6 +644,14 @@ class JointParticleFilter:
             # now loop through and update each entry in newParticle...
 
             "*** YOUR CODE HERE ***"
+
+            prevGhostPositions = setGhostPositions(gameState, oldParticle)
+            for iGhost in range(self.numGhosts):
+                # sample from the possible ghost movement targets
+                print iGhost
+                newParticle[iGhost] = util.sample(
+                    getPositionDistributionForGhost(
+                        prevGhostPositions, iGhost, self.ghostAgents[iGhost-1] ))
 
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
