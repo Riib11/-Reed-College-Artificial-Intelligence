@@ -650,6 +650,8 @@ class JointParticleFilter:
 
             "*** YOUR CODE HERE ***"
 
+            # 
+
             prevGhostPositions = setGhostPositions(gameState, oldParticle)
             for iGhost in range(self.numGhosts):
                 # sample from the possible ghost movement targets
