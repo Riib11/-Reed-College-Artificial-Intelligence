@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Greedy Epsilon</span></h1><h2 class="h2"><span class="span">Learning Rate</span></h2><p class="paragraph"><span class="span">QLearning without counts, just using constant a (alpha)</span></p><pre><code><pre class="codemultiline ">forall (q,s) in Q x S: U(q, s) := 0
+repeat:
+    with prob e:
+        choose random s
+    otherwise:
+        choose argmax(s, U(q,s))
+    observe transition q -s-> q'
+    U(q, s) += a ( R0(q, s, q') + g max(s', U(q', s') - U(q, s)))</pre></code></pre><h2 class="h2"><span class="span">Black Jack</span></h2></div></body>
+
+<head>
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Probability</span></h1><p class="mathmultiline">$$
+\newcommand{\dbot}{\mathbin{\text{$\bot\mkern-8mu\bot$}}}
+$$</p><h2 class="h2"><span class="span">Joint Probabilities</span></h2><p class="paragraph"><span class="span">Factoring joint probabilities:</span></p><p class="mathmultiline">$$
+    P(x_1, \ds, x_n) = P(x_1) - P(x_2 | x_1) \cdots P(x_n | x_1, \ds x_{n-1})
+$$</p><h2 class="h2"><span class="span">Conditional Independence</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. Events <span class="mathinline">\(X\)</span> and <span class="mathinline">\(Y\)</span> are conditionally independent on <span class="mathinline">\(Z\)</span> if and ony if</span></p><p class="mathmultiline">$$
+    P(x | y, z) = P(x | z) \\
+    \land P(y | x, z) = P(y | z)
+$$</p><p class="paragraph"><span class="span">for all values of <span class="mathinline">\(x,y,z\)</span>.</span></p><h2 class="h2"><span class="span">Example: Blood Types</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. Two factors <span class="mathinline">\(A\)</span> and <span class="mathinline">\(B\)</span> are <span class="bold">marginally independent</span> if they do not directly affect each other's likelihoods.</span></p><p class="paragraph"><span class="span"><span class="italic">Notation</span>. "<span class="mathinline">\(A \dbot B\)</span>" abbreviates "<span class="mathinline">\(A\)</span> and <span class="mathinline">\(B\)</span> are marginally independent".</span></p><p class="paragraph"><span class="span">Consider this situation: We have parents Rhonda and Sam, and child Tim.</span></p><p class="paragraph"><span class="span">Genetypes: <span class="mathinline">\(\{ AA, AB, AO, BB, BO, OO \}\)</span></span></p><p class="paragraph"><span class="span">Phenotypes: <span class="mathinline">\(\{ A, B, AB, O \}\)</span></span></p><p class="paragraph"><span class="span">Genotypes <span class="mathinline">\(\rightarrow\)</span> Phenotypes:</span></p><p class="mathmultiline">$$
+\begin{cases}
+    AA, AO &\mapsto A \\
+    BB, BO &\mapsto B \\
+    AB &\mapsto AB \\
+    OO &\mapsto O
+\end{cases}
+$$</p><p class="paragraph"><span class="span">"R is conditionally independent on S"</span></p><p class="mathmultiline">$$
+R \dbot S | \varnothing \\
+R \not\dbot S | T \\
+R \dbot S | \{ \overline{R}, T \}
+$$</p><p class="paragraph"><span class="span">note that conditional independence is not monotonic withe the amount of auxilliary information given.</span></p><p class="paragraph"><span class="span"><span class="italic">Notation</span>. <span class="mathinline">\(\d{R}\)</span> is <span class="mathinline">\(R\)</span>'s genotype, and <span class="mathinline">\(R\)</span> is <span class="mathinline">\(R\)</span>'s phenotype.</span></p><p class="mathmultiline">$$
+    R \dbot S | \varnothing \\
+    R \not\dbot | \{ T \} \\
+    R \dbot S | \{ T, \d{R} \}
+$$</p><p class="paragraph"><span class="span">There are <span class="mathinline">\(6^3 \cdot 4^3 = 13,824\)</span> possible genotype-phenotype assignments. Each assignment has an associated probability.</span></p><p class="paragraph"><span class="span">Expanding a probability:</span></p><p class="mathmultiline">$$
+    P(\d{r}, \d{s}, \d{t}, r, s, t) =
+        \cdot P(\d{r})
+        \cdot P(\d{s} | \d{r})
+        \cdot P(\d{t} | \d{r}, \d{s})
+        \cdots P(t | s, r, \d{t}, \d{s}, \d{r})
+$$</p><p class="paragraph"><span class="span">But since we know certain marginal independences, so we can rewrite</span></p><p class="mathmultiline">$$
+    P(\d{s} | \d{r}) = P(\d{s}) \\
+    \forall x, P(x | y) = P(x) \text{ where } x \neq y \\
+    \forall x, P(x | \d{y}) = P(x) \text{ where } x \neq y
+    \\
+    P(\d{r}, \d{s}, \d{t}, r, s, t) =
+        \cdot P(\d{r})
+        \cdot P(\d{s})
+        \cdot P(\d{t} | \d{r}, \d{s})
+        \cdot P(r | \d{r})
+        \cdot P(s | \d{s})
+        \cdot P(t | \d{t})
+    \\
+    5 + 5 + 215 + 23 + 23 + 23 + 23 = 294 \text{ possibilities!}
+$$</p><p class="paragraph"><span class="span"><span class="bold">Bayesian Network</span></span></p><img src="graphs/28.probgraph.png" class="image"><p class="paragraph"><span class="span">So, drawing <span class="mathinline">\(A \righarrow B\)</span> implies that <span class="mathinline">\(P(A, B) = P(A) P(B | A)\)</span>. Drawing <span class="mathinline">\(B \righarrow A\)</span> implies that <span class="mathinline">\(P(A, B) = P(B) P(B | A)\)</span>. <span class="italic">And</span>, drawing <span class="mathinline">\(A\)</span> and <span class="mathinline">\(B\)</span> unconnected implies that <span class="mathinline">\(P(A, B) = P(A) P(B)\)</span>.</span></p><h2 class="h2"><span class="span">Example: Bonfire</span></h2><p class="paragraph"><span class="span">You are invited to friend's house for a bonfire. On your way there, you see billows of smoke coming from the house's general direction. What should you assume?</span></p><p class="paragraph"><span class="span">Factors: Fire Safety, Bonfire, House Fire, Invitation, Smoke</span></p><p class="paragraph"><span class="span">Bayesian network:</span></p><img src="graphs/28.bonfire.png" class="image"><h2 class="h2"><span class="span">Bayesian Networks</span></h2><p class="paragraph"><span class="span">There are a couple atomic subgraphs:</span></p><p class="paragraph"><span class="span">Fork: <span class="mathinline">\(X \not\dbot Y\)</span>, <span class="mathinline">\(X \dbot Y | Z\)</span>.</span></p><img src="graphs/28.bnfork.png" class="image"><p class="paragraph"><span class="span">Chain: <span class="mathinline">\(X \not\dbot Y\)</span>, <span class="mathinline">\(X \dbot Y | Z\)</span>.</span></p><img src="graphs/28.bnchain.png" class="image"><p class="paragraph"><span class="span">Collider: <span class="mathinline">\(X \dbot Y\)</span>,  <span class="mathinline">\(X \not\dbot Y | Z\)</span>.</span></p><img src="graphs/28.bncollider.png" class="image"><p class="paragraph"><span class="span"><span class="italic">Definition</span>. Given a set <span class="mathinline">\(Z\)</span> of nodes, a path <span class="mathinline">\(X - W_1 - \cdots - W_k - Y\)</span> is <span class="bold">blocked</span> by <span class="mathinline">\(Z\)</span> if <span class="mathinline">\(\exists W_i\)</span> such that</span></p><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(W_i \in Z\)</span> and <span class="mathinline">\(W_i\)</span> is the center of a fork or chain</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(W_i \not\in Z\)</span>, no descendant of <span class="mathinline">\(W_i\)</span> is in <span class="mathinline">\(Z\)</span>, and <span class="mathinline">\(W_i\)</span> is the center of a collider</span></li><p class="paragraph"><span class="span">If every path between nodes <span class="mathinline">\(X\)</span> and <span class="mathinline">\(Y\)</span> is blocked by <span class="mathinline">\(Z\)</span>, then <span class="mathinline">\(X\)</span> and <span class="mathinline">\(Y\)</span> are <span class="mathinline">\(d\)</span>-separeted by <span class="mathinline">\(Z\)</span> (<span class="mathinline">\(X \dbot Y | Z)\)</span>. I.e. <span class="mathinline">\(X \bot Y | Z \implies X \dbot Y | Z\)</span>.</span></p></div></body>
+
+<head><link href="style/main.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

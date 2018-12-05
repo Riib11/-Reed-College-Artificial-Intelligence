@@ -504,7 +504,7 @@ class JointParticleFilter:
         self.ghostAgents.append(agent)
 
     def getJailPosition(self, i):
-        return (2 * i + 1, 1);
+        return (2 * i + 1, 1)
 
     def observeState(self, gameState):
         """
@@ -549,35 +549,35 @@ class JointParticleFilter:
 
         # update particles based on observation
         for iPart, ps in enumerate(self.particles):
-            # is on top of pacman
             if any([pos == pacmanPosition for pos in ps]):
                 self.weights[iPart] = 0
                 continue
 
-            weight = 0
+            weight = 1.0
             for iGhost in range(self.numGhosts):
                 # if just captured ghost, you know its in jail
                 if noisyDistances[iGhost] == None:
-                    # set each particle to believe this ghost is in jail
+                    # set to believe this ghost is in jail
                     self.particles[iPart] = \
                         self.getParticleWithGhostInJail(ps, iGhost)
-                    weight += 1.0
+                    weight *= 1.0
                 # otherwise, handle normal (ghost wasn't captured)
                 else:
-                    weight += emissionModels[iGhost] \
-                    [ util.manhattanDistance \
-                        (ps[iGhost], pacmanPosition) ]
-            # combine weights (average)
-            self.weights[iPart] = weight #/ self.numGhosts
+                    weight *= \
+                        emissionModels[iGhost] \
+                        [util.manhattanDistance \
+                        (ps[iGhost], pacmanPosition)]
+            self.weights[iPart] = weight
 
         # new belief distribution
         beliefs = self.getBeliefDistribution()
 
         # if all particles are assigned 0 weight, resample uniformly
         if beliefs.totalCount() == 0:
+            self.currentPacmanPosition = pacmanPosition
             self.initializeParticles()
-            # and also make to believe
-            # all known jailed ghosts are in jail
+            # and make sure that all particles believe
+            # known jailed ghosts are in jail
             for iGhost in range(self.numGhosts):
                 if noisyDistances[iGhost] == None:
                     for iPart, ps in enumerate(self.particles):
@@ -654,8 +654,9 @@ class JointParticleFilter:
             for iGhost in range(self.numGhosts):
                 # sample from the possible ghost movement targets
                 newParticle[iGhost] = util.sample(
-                    getPositionDistributionForGhost(
-                        prevGhostPositions, iGhost, self.ghostAgents[iGhost] ))
+                    getPositionDistributionForGhost \
+                        (prevGhostPositions, iGhost,
+                        self.ghostAgents[iGhost]))
 
             "*** END YOUR CODE HERE ***"
             newParticles.append(tuple(newParticle))
