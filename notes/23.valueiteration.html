@@ -6,7 +6,7 @@
 <div id="container"><h1 class="h1"><span class="span">Value Iteration</span></h1><p class="mathmultiline">$$
 \newcommand{\p}{^\prime}
 \newcommand{\t}[1]{\text{#1}}
-$$</p><h2 class="h2"><span class="span">Blackjack Continued</span></h2><img src="graphs/21.blackjack.png" class="image"><p class="paragraph"><span class="span"><span class="italic">Note</span>. This graph is missing probabilities.</span></p><p class="paragraph"><span class="span">Looking for utility:</span></p><p class="mathmultiline">$$
+$$</p><h2 class="h2"><span class="span">Blackjack Continued</span></h2><img class="image" src="graphs/21.blackjack.png"><p class="paragraph"><span class="span"><span class="italic">Note</span>. This graph is missing probabilities.</span></p><p class="paragraph"><span class="span">Looking for utility:</span></p><p class="mathmultiline">$$
 \begin{aligned}
     U^\pi(q)
         &= R_0(q)
@@ -30,7 +30,7 @@ $$</p><p class="paragraph"><span class="span">Note that</span></p><p class="math
     U(S21) &= R_0(S21) \\
     U(\t{Bust}) &= R_0(\t{Bust}) \\
 \end{aligned}
-$$</p><p class="paragraph"><span class="span">This seems like a system of equations that should be easy to solve, <span class="italic">but</span>, since max is not linear we can't just do that. <span class="italic">Value iteration</span> is a numerical method for solving this kind of system.</span></p><h2 class="h2"><span class="span">Value Iteration</span></h2><p class="paragraph"><span class="span">Consider the following toy situation</span></p><img src="graphs/23.toyvalueit.png" class="image"><p class="mathmultiline">$$
+$$</p><p class="paragraph"><span class="span">This seems like a system of equations that should be easy to solve, <span class="italic">but</span>, since max is not linear we can't just do that. <span class="italic">Value iteration</span> is a numerical method for solving this kind of system.</span></p><h2 class="h2"><span class="span">Value Iteration</span></h2><p class="paragraph"><span class="span">Consider the following toy situation</span></p><img class="image" src="graphs/23.toyvalueit.png"><p class="mathmultiline">$$
 \begin{aligned}
     U(A)
         &= R_0(A)
@@ -89,7 +89,7 @@ $$</p><p class="paragraph"><span class="span">and</span></p><p class="mathmultil
 \end{aligned}
 $$</p></div></body>
 
-<head><link href="style/main.css" type="text/css" rel="stylesheet">
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
 <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
 <script type="text/javascript" src="highlight/highlight.pack.js">
 </script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>

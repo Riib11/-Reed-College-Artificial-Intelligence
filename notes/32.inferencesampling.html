@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+
+<body>
+<div id="container"><h1 class="h1"><span class="span">Inference by Sampling</span></h1><p class="mathmultiline">$$
+\newcommand{\t}[1]{\text{#1}}
+$$</p><h2 class="h2"><span class="span">The Algorithm</span></h2><p class="paragraph"><span class="span"><span class="italic">Definition</span>. A <span class="bold">topological order</span> of hte nodes of a DAG, <span class="mathinline">\(G\)</span>, is any order of the nodes so that a child never appears before its parent.</span></p><p class="paragraph"><span class="span">Initialize <span class="mathinline">\(\text{count}(x_1, \dots, x_n) = 0, \forall x_1, \dot, x_n \in X_1 \times \cdots \time X_n\)</span>. Then repeat <span class="mathinline">\(K\)</span> times:</span></p><li class="unorderedlistitem"><span class="span">sample <span class="mathinline">\(x_1, \dots, x_n\)</span> from <span class="mathinline">\(P(x_1, \dots, x_n)\)</span>.</span></li><li class="unorderedlistitem"><span class="span"><span class="mathinline">\(\t{count}(x_1, \dots, x_n) += 1\)</span></span></li><p class="paragraph"><span class="span">Ask <span class="mathinline">\(\rightarrow \infty\)</span>: <span class="mathinline">\(\frac{\t{count}(x_1, \dots, x_n)}{k} \rightarrow P(x_1, \dots, x_n)\)</span>, which is what we want!</span></p><p class="paragraph"><span class="span">Then</span></p><p class="mathmultiline">$$
+    P(R=AB \mid T=A)
+    &= P(R=AB, T=A) / P(T=A) \\
+    &= \frac{\sum_{r^*} \cdots \sum P(R=AB, T=A, r^*, \dots)}
+        {\sum_{r^*} \cdots \sum P(T=A, r^*, \dots)} \\
+    &\approx
+        \frac{\sum_{r^*, \dots}
+            \frac{\t{count}(r^*, s^*, t^*, R=A, s, T=AB, m, f)}{K}}
+        {\sum_{r^*, \dots}
+            \frac{\t{count}(r^*, s^*, t^*, r, s, T=AB, m, f)}{K}} \\
+    &= \frac{\t{total number of samples where R=A and T=AB}}
+        {\t{total number of samples where T=AB}}
+$$</p><h2 class="h2"><span class="span">Dart Board Example</span></h2><p class="paragraph"><span class="span">Suppose we can throw darts at dart board so that they land uniformly randomly. Then to calculate the area of a particular piece of the dart board, can just keep throwing darts and measure the percentage of times that we hit it times the area of the dart board.</span></p><h2 class="h2"><span class="span">Colloidal Silver</span></h2><p class="paragraph"><span class="span">Facebook ad that's really over the top about the health benefits of Colloidal Silver.</span></p><p class="paragraph"><span class="span">Endorsed by some celebrities (on Info Wars and Goop).</span></p><p class="paragraph"><span class="span">Have the following Bayesian network</span></p><img class="image" src="graphs/silver01.png"><p class="paragraph"><span class="span">But the probabilities work out that its extremeley rare to find someone with AIMA, so its not well known that's a risk of Colloidal Silver.</span></p><h2 class="h2"><span class="span">Topics for Final</span></h2><li class="unorderedlistitem"><span class="span">Understand the basics of <span class="bold">Q-learning</span> (and also <span class="italic">when</span> it is an isn't applicable)</span></li><li class="unorderedlistitem"><span class="span">Use <span class="bold">value iteration</span> to compute the MEU of a MDP state and optimal policy</span></li><li class="unorderedlistitem"><span class="span">Understand how to read a <span class="bold">Bayesian network</span>, and how to expand it and answer questions about it</span></li><li class="unorderedlistitem"><span class="span">Know the width of an elimination order and how it affects runtime of variable elimination (VE)</span></li><p class="paragraph"><span class="span"><span class="italic">Definition</span>. The <span class="bold">width</span> of an elimination order is, when eliminating on the moralized graph of the Bayesian network, is the max number of connections a single node has. For example</span></p><p class="paragraph"><span class="span">Original Bayesian network</span></p><img class="image" src="graphs/width01.png"><p class="paragraph"><span class="span">Moralized graph</span></p><img class="image" src="graphs/width02.png"><p class="paragraph"><span class="span">Elimination</span></p><img class="image" src="graphs/width03.png"></div></body>
+
+<head><link rel="stylesheet" type="text/css" href="style/main.css">
+<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-MML-AM_CHTML" async></script>
+<script type="text/javascript" src="highlight/highlight.pack.js">
+</script><script type="text/javascript">hljs.initHighlightingOnLoad()</script></head>
+
+</html>

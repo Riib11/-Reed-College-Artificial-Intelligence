@@ -1,0 +1,6 @@
+digraph {
+    graph [ratio=1]
+    A -> C
+    B -> C
+    C -> D
+}

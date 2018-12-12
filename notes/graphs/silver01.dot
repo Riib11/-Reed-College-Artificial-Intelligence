@@ -1,0 +1,7 @@
+digraph {
+    graph [ratio=1]
+    "subscribed Info Wars (I)" -> "subscribed Goop (G)"
+    "subscribed Goop (G)" -> "Uses Silver (S)"
+    "Info Wars (I)" -> "Uses Silver (S)"
+    "Uses Silver (S)" -> "AIMA (A)"
+}
